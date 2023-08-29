@@ -20,6 +20,7 @@ def custombasename(fullname):
 IN_PATH = './data_annotated'
 OUT_PATH = './dota_txt'
 
+
 file_list = glob(IN_PATH + '/*.json')
 
 for i in range(len(file_list)):
