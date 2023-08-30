@@ -19,7 +19,6 @@ labelimg/labelme
 
 各类数据集格式如下
 
-
 coco
 - annotations
 - train
@@ -29,3 +28,7 @@ coco
 yolo
 - 
 
+
+任务类型
+- 检测
+- 分割
