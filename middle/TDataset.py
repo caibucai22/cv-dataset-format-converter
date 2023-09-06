@@ -10,10 +10,17 @@ import os
 
 class TDataset():
 
-    def __init__(self, type, source_path, dst_path='./', is_copuled=True):
+    def __init__(self, type, source_path, dst_path='./', task='detect', is_copuled=True):
         self.source_path = source_path
         self.dst_path = dst_path
         self.type = type
+        self.task = task
+        # 标注和图片保持对应关系, 一个标注是一个记录
+        self.anns = dict()
+        self.cats = dict()
+        self.imgs = dict()
+
+        # check 路径下是否存在文件
 
     def getImageList(self):
         pass
