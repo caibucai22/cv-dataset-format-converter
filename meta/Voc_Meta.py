@@ -11,8 +11,8 @@ voc 是xml格式 这里以dict(json)形式表示
 
 <annotation>
 	<folder>Pictures</folder>
-	<filename>apple.jpg</filename>
-	<path>C:\Users\Csy\Pictures\apple.jpg</path>
+	<filename>01.jpg</filename>
+	<path>C:\Users\Csy\Pictures\01.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
