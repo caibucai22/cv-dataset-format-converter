@@ -11,21 +11,22 @@ Dataset_setting = {
     'coco': {
         'img_types': [],
         'anno_type': '.json',
-        'dirs':['train','val','test','annotations']
+        'dirs': ['train', 'val', 'test', 'annotations']
     },
     'labelme': {
         'img_types': [],
         'anno_type': '.json',
-        'dirs':['images','labels']
+        'dirs': ['images', 'labels']
     },
     'yolo': {
-        'img_types': ['.jpg','.png'],
+        'img_types': ['.jpg', '.png'],
         'anno_type': '.txt',
-        'dirs':['images','labels']
+        'dirs': ['images', 'labels']
     },
     'dota': {
         'img_types': [],
-        'anno_type': '.txt'
+        'anno_type': '.txt',
+        'dirs': ['images', 'labels']
     },
 }
 

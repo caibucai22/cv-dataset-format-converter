@@ -8,4 +8,6 @@
 """
 
 UNSUPPORTED_DATASET_TYPE = "unsupported dataset type"
+UNSUPPORTED_SHAPE_TYPE = "unsupported shape type"
+
 NUM_OF_IMAGES_AND_LABELS_NOT_MATCH = 'the num of images and labels not match'

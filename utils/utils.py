@@ -6,8 +6,10 @@
 # @brief     : 实现 部分依赖的 工具函数
 """
 import os
+import shutil
 from meta.Dataset_Meta import *
 from utils.Exception import *
+from utils.image import *
 
 
 def print_dirs_info(source_dir):
@@ -26,7 +28,7 @@ def get_imgs(source_dir, dataset_type):
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
     else:
         raise Exception(UNSUPPORTED_DATASET_TYPE)
-    return  sorted(imgs),len(imgs),
+    return sorted(imgs), len(imgs),
 
 
 def get_Anns(source_dir, dataset_type='coco'):
@@ -40,7 +42,7 @@ def get_Anns(source_dir, dataset_type='coco'):
         anns = getAnnListFromMulti(source_dir, dataset_type='labelme')
     else:
         raise Exception(UNSUPPORTED_DATASET_TYPE)
-    return  anns,len(anns),
+    return anns, len(anns),
 
 
 def check_anno_file_exist(source_dir, type, exist_with_img=True):
@@ -86,6 +88,15 @@ def getAnnListFromMulti(source_dir, dataset_type):
     return ann_list
 
 
+def save_dota_image(json_data, img_name, source_images_dir_path, dst_images_dir_path):
+    sour_img_path = os.path.join(source_images_dir_path, img_name)
+    dst_img_path = os.path.join(dst_images_dir_path, img_name)
+    if json_data is not None and (json_data['imageData'] is not None) and not os.path.exists(dst_img_path):
+        img = img_b64_to_arr(json_data['imageData'])
+        PIL.Image.fromarray(img).save(dst_img_path)
+    else:
+        shutil.copyfile(sour_img_path, dst_img_path)
+    return dst_img_path
 
 if __name__ == '__main__':
     # test
@@ -101,5 +112,3 @@ if __name__ == '__main__':
     # print(imgs_list)
     # print(anns_list)
     # test
-
-
