@@ -1,6 +1,8 @@
-思路
-从用户提供的数据集中 提取信息 得到一个中间格式
-然后由中间格式 再转换为目标格式
+label-form-conversion-tool 
+用于计算机视觉任务的数据集格式转换工具
+## 支持任务类型
+- 目标检测
+- 实例分割
 
 ## 支持数据源
 1. 来自 labelimg 
@@ -11,22 +13,10 @@
     3. dota
     4. voc
 
-
-labelimg/labelme
+## 数据源格式
+### labelimg/labelme
 1. json文件和图像文件在同一个文件夹下
 2. json文件和图像文件不在同一个文件夹下
-
-标注信息的文件数量
-1. 单个 json文件 , coco 【保存的信息 比较完善 需要的用户提供的额外信息少】
-2. 多个 json/txt/xml 文件 , labelimg , labelme , yolo , dota, voc 【保存了核心的标注信息, 需要用户额外提供 类别信息、】
-
-各类数据集格式如下
-
-coco
-- annotations
-- train
-- val
-- test
 
 labelimg 【取消该类型】
 - images ...
@@ -36,27 +26,22 @@ labelme
 - images ...
 - labels ...
 
+### coco
+coco
+- annotations
+- train
+- val
+- test
 
+### yolo
 yolo
 - images
   - train/test/val
 - labels
   - train/test/val
 
-dota
+### dota
 
-voc
-
-
+### voc
 
 
-任务类型
-- 检测
-- 分割
-
-思路：
-1. 先根据meta获取到所有信息 -> 构建 TDatast -> 根据TDataset和目标meta 生成目标数据集
-
-进一步
-做 图像预处理增强 集成
-包括 图像切片 ...
