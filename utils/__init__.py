@@ -8,5 +8,7 @@
 """
 
 from .image import img_b64_to_arr
+from .image import apply_exif_orientation
 
 from .utils import *
+from .shape import *

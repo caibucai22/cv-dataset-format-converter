@@ -10,13 +10,29 @@ import shutil
 from meta.Dataset_Meta import *
 from utils.Exception import *
 from utils.image import *
+import utils
 
 
-def print_dirs_info(source_dir):
+def print_dirs_info(source_dir,display=True):
+    cur_dirs = []
     for root, dirs, files in os.walk(source_dir):
         for name in dirs:
-            print(name)
+            cur_dirs.append(name)
+            if display:
+                print(name)
+    return sorted(cur_dirs)
 
+def check_and_create_dir(dst_dataset_type,dst_dir):
+    cur_dirs = utils.print_dirs_info(dst_dir)
+    dst_dirs = Dataset_setting[dst_dataset_type]['dirs']
+    if len(dst_dirs) != len(cur_dirs):
+        # 移除已有文件夹
+        for dir in cur_dirs:
+            # 不为空也可删
+            shutil.rmtree(os.path.join(dst_dir, dir))
+        # 创建目标数据集格式文件夹
+        for dir in dst_dirs:
+            os.mkdir(os.path.join(dst_dir, dir))
 
 def get_imgs(source_dir, dataset_type):
     imgs = []
@@ -97,6 +113,7 @@ def save_dota_image(json_data, img_name, source_images_dir_path, dst_images_dir_
     else:
         shutil.copyfile(sour_img_path, dst_img_path)
     return dst_img_path
+
 
 if __name__ == '__main__':
     # test

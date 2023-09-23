@@ -58,6 +58,9 @@ voc
 
 思路：
 1. 先根据meta获取到所有信息 -> 构建 TDatast -> 根据TDataset和目标meta 生成目标数据集
+2. labelme 标注是 多个 .json 文件 -> 只生成一个 annotations.json  数据集；
+   labelme 先划分 然后再去各自生成 子数据集
+
 
 ## 待实现功能
 做 图像预处理增强 集成 包括 图像切片 ...

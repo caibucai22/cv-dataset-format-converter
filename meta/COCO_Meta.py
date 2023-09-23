@@ -16,7 +16,25 @@ meta_key = {
     "annotations": []
 }
 
-info_key = {"descrption", "url", "version", "year", "contributor", "date_created"}
-license_key = {"url","id","name"}
-category_key = {"supercategory","id","name"}
-annotation_key = {"segmentation", "area", "iscrowd", "image_id", "bbox", "category_id", "id"}
+info_key = {"descrption": None,
+            "url": None,
+            "version": None,
+            "year": None,
+            "contributor": None,
+            "date_created": None
+            }
+license_key = {"url": None,
+               "id": None,
+               "name": None
+               }
+category_key = {"supercategory": None,
+                "id": None,
+                "name": None
+                }
+annotation_key = {"segmentation": None,
+                  "area": None,
+                  "iscrowd": None,
+                  "image_id": None,
+                  "bbox": None,
+                  "category_id": None,
+                  "id": None}

@@ -12,6 +12,7 @@ import uuid
 
 import imgviz
 import numpy as np
+import pycocotools
 
 import labelme
 

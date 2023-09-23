@@ -11,7 +11,7 @@ Dataset_setting = {
     'coco': {
         'img_types': [],
         'anno_type': '.json',
-        'dirs': ['train', 'val', 'test', 'annotations']
+        'dirs': ['train', 'val','test','annotations']
     },
     'labelme': {
         'img_types': [],
