@@ -16,17 +16,20 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QWidget" name="widget" native="true">
+     <widget class="QWidget" name="file_operation_type_widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="file_conversion_radioButton">
          <property name="text">
           <string>文件转换  </string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="dataset_conversion_radioButton">
          <property name="text">
           <string>数据集转换与划分</string>
          </property>
@@ -42,10 +45,10 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="widget_3" native="true">
+     <widget class="QWidget" name="format_select_widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2,1,2">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="src_format_label">
          <property name="text">
           <string>源样式</string>
          </property>
@@ -55,7 +58,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="src_format_comboBox">
          <item>
           <property name="text">
            <string>VOC</string>
@@ -79,7 +82,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="dst_format_label">
          <property name="text">
           <string>目标样式</string>
          </property>
@@ -89,7 +92,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_2">
+        <widget class="QComboBox" name="dst_format_comboBox">
          <item>
           <property name="text">
            <string>VOC</string>
@@ -116,10 +119,10 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="widget_4" native="true">
+     <widget class="QWidget" name="divide_proportion_widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0,0,0,0,0">
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="divide_proportion_label">
          <property name="text">
           <string>划分比例</string>
          </property>
@@ -139,7 +142,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_3">
+        <widget class="QRadioButton" name="_8_1_1_radioButton">
          <property name="text">
           <string>8 : 1 : 1</string>
          </property>
@@ -159,7 +162,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_4">
+        <widget class="QRadioButton" name="_6_2_2_radioButton">
          <property name="text">
           <string>6 : 2 : 2</string>
          </property>
@@ -179,14 +182,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_5">
+        <widget class="QRadioButton" name="_no_divide_radioButton">
          <property name="text">
-          <string>自定义</string>
+          <string>不划分</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit"/>
        </item>
        <item>
         <spacer name="horizontalSpacer_3">
@@ -202,27 +205,30 @@
         </spacer>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_6">
+        <widget class="QRadioButton" name="_custom_radioButton">
          <property name="text">
-          <string>不划分</string>
+          <string>自定义</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="divide_custom_lineEdit"/>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="widget_8" native="true">
+     <widget class="QWidget" name="file_path_widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="src_path_label">
          <property name="text">
           <string>源路径  </string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="src_path_lineEdit">
          <property name="dragEnabled">
           <bool>false</bool>
          </property>
@@ -232,14 +238,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="dst_path_label">
          <property name="text">
           <string>目标路径</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="dst_path_lineEdit">
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -249,20 +255,20 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="widget_2" native="true">
+     <widget class="QWidget" name="buttons_widget" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QWidget" name="widget_7" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="select_src_path_pushButton">
             <property name="text">
              <string>选择源文件/文件夹</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="select_dst_path_pushButton">
             <property name="text">
              <string>选择保存路径</string>
             </property>
@@ -275,14 +281,14 @@
         <widget class="QWidget" name="widget_6" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="start_conversion_pushButton">
             <property name="text">
              <string>开始转换</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="view_result_pushButton">
             <property name="text">
              <string>查看结果</string>
             </property>
