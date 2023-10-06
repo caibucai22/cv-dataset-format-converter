@@ -10,7 +10,7 @@ if os.name == "nt":  # Windows
 
     colorama.init()
 
-from . import __appname__
+# from . import __appname__
 
 
 COLORS = {
@@ -50,7 +50,7 @@ class ColoredFormatter(logging.Formatter):
         return logging.Formatter.format(self, record)
 
 
-logger = logging.getLogger(__appname__)
+# logger = logging.getLogger(__appname__)
 
 stream_handler = logging.StreamHandler(sys.stderr)
 handler_format = ColoredFormatter(
@@ -58,4 +58,4 @@ handler_format = ColoredFormatter(
 )
 stream_handler.setFormatter(handler_format)
 
-logger.addHandler(stream_handler)
+# logger.addHandler(stream_handler)
