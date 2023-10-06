@@ -138,5 +138,4 @@ dmypy.json
 cython_debug/
 
 .idea
-exp_dataset
 temp_test

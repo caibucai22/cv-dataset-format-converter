@@ -10,7 +10,8 @@ if os.name == "nt":  # Windows
 
     colorama.init()
 
-from . import __appname__
+# from . import __appname__
+__appname__ = 'lfctv0.5'
 
 
 COLORS = {

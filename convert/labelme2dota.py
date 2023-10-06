@@ -84,6 +84,8 @@ class Labelme2Dota():
             dota_obj_list = self.get_dota_object_list(json_data, img_path)
             self.save_dota_label(json_name, self.dst_labels_dir_path, dota_obj_list)
 
+
+
     def convert_one(self, json_name):
         json_path = os.path.join(self.source_labels_dir_path, json_name)
         json_data = json.load(open(json_path))
