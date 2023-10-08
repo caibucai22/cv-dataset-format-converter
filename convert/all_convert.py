@@ -1,4 +1,4 @@
-from convert.labelme2dota import Labelme2Dota
+from convert.labelimg2dota import Labelimg2Dota
 
 
 def dota2voc():
@@ -16,7 +16,7 @@ def dota2yolo():
     pass
 
 
-def dota2labelme():
+def dota2labelimg():
     print('data2data is not supported yet')
     pass
 
@@ -36,7 +36,7 @@ def voc2yolo():
     pass
 
 
-def voc2labelme():
+def voc2labelimg():
     print('data2data is not supported yet')
     pass
 
@@ -56,7 +56,7 @@ def coco2yolo():
     pass
 
 
-def coco2labelme():
+def coco2labelimg():
     print('data2data is not supported yet')
     pass
 
@@ -76,25 +76,25 @@ def yolo2coco():
     pass
 
 
-def yolo2labelme():
+def yolo2labelimg():
     print('data2data is not supported yet')
     pass
 
 
-def labelme2dota(source_dir, dst_dir, ann_image_together=True):
-    Labelme2Dota(source_dir, dst_dir, ann_image_together).convert()
+def labelimg2dota(source_dir, dst_dir, ann_image_together=True):
+    labelimg2Dota(source_dir, dst_dir, ann_image_together).convert()
 
 
-def labelme2yolo(source_dir, dst_dir, ann_image_together=True):
-    print('labelme2yolo is not supported yet')
+def labelimg2yolo(source_dir, dst_dir, ann_image_together=True):
+    print('labelimg2yolo is not supported yet')
     pass
 
 
-def labelme2voc(source_dir, dst_dir, ann_image_together=True):
-    print('labelme2voc is not supported yet')
+def labelimg2voc(source_dir, dst_dir, ann_image_together=True):
+    print('labelimg2voc is not supported yet')
     pass
 
 
-def labelme2coco(source_dir, dst_dir, ann_image_together=True):
-    print('labelme2coco is not supported yet')
+def labelimg2coco(source_dir, dst_dir, ann_image_together=True):
+    print('labelimg2coco is not supported yet')
     pass

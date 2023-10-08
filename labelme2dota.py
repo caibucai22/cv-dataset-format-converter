@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-# @file name : labelme2dota.py
+# @file name : labelimg2dota.py
 # @author    : Csy
 # @date      : 2023-06-22 14:14
 # @brief     : coco json 转换 dota 格式 标注未

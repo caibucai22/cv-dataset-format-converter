@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 """
-@File    ：labelme2dota.py
+@File    ：labelimg2dota.py
 @Author  ：Csy
 @Date    ：2023-09-11 21:28
 @Bref    :
@@ -28,7 +28,7 @@ from meta import COCO_Meta
 import label_file as labelfile
 
 
-class Labelme2COCO():
+class Labelimg2COCO():
 
     # 0.9x = 0.1
     def __init__(self, source_dir, dst_dir, source_labels_txt_path, ann_image_together=True, test_size=0.1,

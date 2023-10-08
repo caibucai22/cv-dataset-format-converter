@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 """
-@File    ：labelme2yolo.py
+@File    ：labelimg2yolo.py
 @Author  ：Csy
 @Date    ：2023-09-07 21:28 
 @Bref    :
@@ -20,7 +20,7 @@ from meta.Dataset_Meta import *
 import utils
 
 
-class Labelme2YOLO():
+class Labelimg2YOLO():
 
     def __init__(self, source_dir, dst_dir,ann_image_together=True):
         self.source_dir = source_dir

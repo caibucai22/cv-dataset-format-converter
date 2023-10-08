@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 """
-@File    ：labelme2dota.py
+@File    ：labelimg2dota.py
 @Author  ：Csy
 @Date    ：2023-09-11 21:28
 @Bref    :
@@ -21,7 +21,7 @@ import utils
 from utils.Exception import *
 
 
-class Labelme2Dota():
+class Labelimg2Dota():
 
     def __init__(self, source_dir, dst_dir, ann_image_together=True):
         self.source_dir = source_dir
