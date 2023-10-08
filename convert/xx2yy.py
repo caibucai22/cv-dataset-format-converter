@@ -10,7 +10,7 @@ import os
 import json
 from collections import OrderedDict
 
-from utils import utils
+from utils import util
 from meta.Dataset_Meta import Dataset_setting
 
 
@@ -45,7 +45,7 @@ class XX2YY():
         [-1])
         if self.dst_dataset_type == 'coco':
             # coco annotations test train val
-            dst_dirs = utils.print_dirs_info(dst_dir, display=False)
+            dst_dirs = util.print_dirs_info(dst_dir, display=False)
             # test train val
             self.dst_images_dir_path = [os.path.join(self.dst_dir, dir) for dir in dst_dirs if
                                         dir not in ['annotations']]
@@ -60,7 +60,7 @@ class XX2YY():
         print('src dir struct:')
         utils.print_dirs_info(source_dir)
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type=self.source_dataset_type)
+        self.imgs_list, _ = util.get_imgs(self.source_dir, dataset_type=self.source_dataset_type)
         self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type=self.source_dataset_type)
 
     def get_label_id_map(self, json_dir):

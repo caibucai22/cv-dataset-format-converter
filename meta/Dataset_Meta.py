@@ -24,7 +24,7 @@ Dataset_setting = {
         'dirs': ['images', 'labels']
     },
     'dota': {
-        'img_types': [],
+        'img_types': ['.png','.bmp'],
         'anno_type': '.txt',
         'dirs': ['images', 'labelTxt']
     },

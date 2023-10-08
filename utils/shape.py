@@ -15,6 +15,30 @@ import PIL.ImageDraw
 import logger
 
 
+def bbox_yolo2dota(x, y, w, h, img_w, img_h):
+    x, y, w, h = x * img_w, y * img_h, w * img_w, h * img_h
+    x1, y1 = x - w / 2, y - h / 2
+    x2, y2 = x + w / 2, y - h / 2
+    x3, y3 = x + w / 2, y + h / 2
+    x4, y4 = x - w / 2, y + h / 2
+    # x1, y1 = (x - w / 2) * img_w, (y - h / 2) * img_h
+    # x2, y2 = (x + w / 2) * img_w, (y - h / 2) * img_h
+    # x3, y3 = (x + w / 2) * img_w, (y + h / 2) * img_h
+    # x4, y4 = (x - w / 2) * img_w, (y + h / 2) * img_h
+
+    return [x1, y1, x2, y2, x3, y3, x4, y4]
+
+
+def bbox_dota2yolo(points, img_w, img_h):
+    # 转换成像素坐标
+    x1, y1, x2, y2, x3, y3, x4, y4 = points
+    w, h = x3 - x1, y3 - y1
+    xc = (x3 + x1) / 2
+    yc = (y3 + y1) / 2
+    xc, yc = xc / img_w, yc / img_h
+    w, h = w / img_w, h / img_h
+    return xc, yc, w, h
+
 def voc2yolo(size, box):
     dw = 1. / size[0]
     dh = 1. / size[1]

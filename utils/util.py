@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-# @file name : utils.py
+# @file name : util.py
 # @author    : Csy
 # @date      : 2023-07-01 17:33
 # @brief     : 实现 部分依赖的 工具函数
 """
 import os
+import PIL
 import shutil
 from meta.Dataset_Meta import *
-from utils.Exception import *
-from utils.image import *
+from utils import Exception as Exception_Define
 import utils
 
-
-def print_dirs_info(source_dir,display=True):
+def print_dirs_info(source_dir, display=True):
     cur_dirs = []
     for root, dirs, files in os.walk(source_dir):
         for name in dirs:
@@ -22,17 +21,23 @@ def print_dirs_info(source_dir,display=True):
                 print(name)
     return sorted(cur_dirs)
 
-def check_and_create_dir(dst_dataset_type,dst_dir):
-    cur_dirs = utils.print_dirs_info(dst_dir)
+
+def check_and_create_dir(dst_dataset_type, dst_dir):
+    cur_dirs = print_dirs_info(dst_dir)
     dst_dirs = Dataset_setting[dst_dataset_type]['dirs']
     if len(dst_dirs) != len(cur_dirs):
         # 移除已有文件夹
+        # a,b = len(dst_dirs),len(cur_dirs)
+        # while b > 0:
+        #     shutil.rmtree(os.path.join(dst_dir,))
         for dir in cur_dirs:
             # 不为空也可删
-            shutil.rmtree(os.path.join(dst_dir, dir))
+            if os.path.exists(os.path.join(dst_dir,dir)):
+                shutil.rmtree(os.path.join(dst_dir, dir))
         # 创建目标数据集格式文件夹
         for dir in dst_dirs:
             os.mkdir(os.path.join(dst_dir, dir))
+
 
 def get_imgs(source_dir, dataset_type):
     imgs = []
@@ -42,8 +47,10 @@ def get_imgs(source_dir, dataset_type):
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
     elif dataset_type == 'labelme':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
+    elif dataset_type == 'dota':
+        imgs = getImageListFromMulti(source_dir, dataset_type='dota')
     else:
-        raise Exception(UNSUPPORTED_DATASET_TYPE)
+        raise Exception(Exception_Define.UNSUPPORTED_DATASET_TYPE)
     return sorted(imgs), len(imgs),
 
 
@@ -56,8 +63,10 @@ def get_Anns(source_dir, dataset_type='coco'):
         anns = getAnnListFromMulti(source_dir, dataset_type='yolo')
     elif dataset_type == 'labelme':
         anns = getAnnListFromMulti(source_dir, dataset_type='labelme')
+    elif dataset_type == 'dota':
+        anns = getAnnListFromMulti(source_dir, dataset_type='dota')
     else:
-        raise Exception(UNSUPPORTED_DATASET_TYPE)
+        raise Exception(Exception_Define.UNSUPPORTED_DATASET_TYPE)
     return anns, len(anns),
 
 
@@ -71,7 +80,7 @@ def check_anno_file_exist(source_dir, type, exist_with_img=True):
         else:
             pass
     else:
-        raise Exception(UNSUPPORTED_DATASET_TYPE)
+        raise Exception(Exception_Define.UNSUPPORTED_DATASET_TYPE)
     return False
 
 
@@ -108,11 +117,23 @@ def save_dota_image(json_data, img_name, source_images_dir_path, dst_images_dir_
     sour_img_path = os.path.join(source_images_dir_path, img_name)
     dst_img_path = os.path.join(dst_images_dir_path, img_name)
     if json_data is not None and (json_data['imageData'] is not None) and not os.path.exists(dst_img_path):
-        img = img_b64_to_arr(json_data['imageData'])
+        img = utils.img_b64_to_arr(json_data['imageData'])
         PIL.Image.fromarray(img).save(dst_img_path)
     else:
         shutil.copyfile(sour_img_path, dst_img_path)
     return dst_img_path
+
+
+def get_label_id_map_with_txt(label_txt_path):
+    class_id2name = {}
+    class_name2id = {}
+    for i, line in enumerate(open(label_txt_path).readlines()):
+        class_id = i  # starts with -1
+        class_name = line.strip()
+
+        class_name2id[class_name] = class_id
+        class_id2name[class_id] = class_name
+    return class_name2id, class_id2name
 
 
 if __name__ == '__main__':
@@ -129,3 +150,9 @@ if __name__ == '__main__':
     # print(imgs_list)
     # print(anns_list)
     # test
+    # class_name2id, class_id2name = get_label_id_map_with_txt(r'E:\01-LabProjects\800\scratch\raw\ScratchDataset_all\classes.txt')
+    # print(class_name2id)
+    # print(class_id2name)
+
+    print_dirs_info(source_dir='../exp_dataset/yolo')
+
