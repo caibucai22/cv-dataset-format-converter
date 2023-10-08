@@ -101,11 +101,12 @@ class Dota2Yolo():
                     f.write(line + '\n')
                 f.close()
             shutil.copy(self.source_images_dir_path + "/" + img_name, self.dst_images_dir_path + "/" + img_name)
-
+        shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
         print('done!')
 
 
 if __name__ == '__main__':
-    convert = Dota2Yolo(source_dir='../exp_dataset/dota', dst_dir='../exp_dataset/yolo',source_labels_txt_path='../exp_dataset/dota/classes.txt',
-              source_dataset_type='dota', dst_datatset_type='yolo')
+    convert = Dota2Yolo(source_dir='../exp_dataset/dota', dst_dir='../exp_dataset/yolo',
+                        source_labels_txt_path='../exp_dataset/dota/classes.txt',
+                        source_dataset_type='dota', dst_datatset_type='yolo')
     convert.convert()

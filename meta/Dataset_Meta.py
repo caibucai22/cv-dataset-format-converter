@@ -19,7 +19,7 @@ Dataset_setting = {
         'dirs': ['images', 'labels']
     },
     'yolo': {
-        'img_types': ['.jpg', '.png'],
+        'img_types': ['.jpg', '.png','.bmp'],
         'anno_type': '.txt',
         'dirs': ['images', 'labels']
     },
