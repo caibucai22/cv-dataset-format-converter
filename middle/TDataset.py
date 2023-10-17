@@ -41,7 +41,7 @@ class TDataset():
             pass
         elif type == 'cityscape':
             pass
-        elif type == 'labelme' or type == 'labelimg':
+        elif type == 'labelimg' or type == 'labelimg':
             pass
         else:
             raise Exception("unsupported dataset type")

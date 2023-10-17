@@ -7,7 +7,7 @@ import sys
 
 import PIL.Image
 
-# from labelme import __version__
+# from labelimg import __version__
 __version__ = '1.0'
 
 # QT4 = QT_VERSION[0] == "4"
@@ -22,9 +22,9 @@ del sys
 
 import logger
 
-# from labelme import PY2
-# from labelme import QT4
-# from labelme import utils
+# from labelimg import PY2
+# from labelimg import QT4
+# from labelimg import utils
 import utils
 
 from utils.Exception import *

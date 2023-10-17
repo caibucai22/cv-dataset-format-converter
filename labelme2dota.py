@@ -11,7 +11,7 @@ import os
 from glob import glob
 
 
-# convert labelme json to DOTA txt format
+# convert labelimg json to DOTA txt format
 
 def custombasename(fullname):
     return os.path.basename(os.path.splitext(fullname)[0])

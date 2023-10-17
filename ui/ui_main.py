@@ -16,7 +16,7 @@ class Ui_Main_UserInput:
         VOC = 'VOC'
         COCO = 'COCO'
         YOLO = 'YOLO'
-        LABELIMG = 'Labelimg'
+        LABELIMG = 'labelimg'
 
     class Operation_Type(Enum):
         FILE = 1
@@ -262,14 +262,14 @@ class Ui_Main(object):
         self.src_format_comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"VOC", None))
         self.src_format_comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"COCO", None))
         self.src_format_comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"YOLO", None))
-        self.src_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Data labelimg", None))
+        self.src_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"labelimg", None))
 
         self.dst_format_label.setText(QCoreApplication.translate("MainWindow", u"\u76ee\u6807\u6837\u5f0f", None))
         self.dst_format_comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"DOTA", None))
         self.dst_format_comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"VOC", None))
         self.dst_format_comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"COCO", None))
         self.dst_format_comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"YOLO", None))
-        self.dst_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Data labelimg", None))
+        self.dst_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"labelimg", None))
 
         self.divide_proportion_label.setText(
             QCoreApplication.translate("MainWindow", u"\u5212\u5206\u6bd4\u4f8b", None))

@@ -39,7 +39,8 @@ def bbox_dota2yolo(points, img_w, img_h):
     w, h = w / img_w, h / img_h
     return xc, yc, w, h
 
-def voc2yolo(size, box):
+
+def bbox_voc2yolo(size, box):
     dw = 1. / size[0]
     dh = 1. / size[1]
     x = (box[0] + box[1]) / 2.0
@@ -50,7 +51,16 @@ def voc2yolo(size, box):
     w = w * dw
     y = y * dh
     h = h * dh
-    return (x, y, w, h)
+    return x, y, w, h
+
+
+def bbox_yolo2voc(x, y, w, h, img_w, img_h):
+    x, y, w, h = x * img_w, y * img_h, w * img_w, h * img_h
+    xmin = int(x - w / 2)
+    ymin = int(y - h / 2)
+    xmax = int(x + w / 2)
+    ymax = int(y + h / 2)
+    return xmin, ymin, xmax, ymax
 
 
 def yolo_point_normalize(point_x, point_y, img_w, img_h):
@@ -62,6 +72,7 @@ def yolo_point_normalize(point_x, point_y, img_w, img_h):
 def seg2bbox(self, seg):
     pass
 
+
 def polygons_to_mask(img_shape, polygons, shape_type=None):
     logger.warning(
         "The 'polygons_to_mask' function is deprecated, "
@@ -71,7 +82,7 @@ def polygons_to_mask(img_shape, polygons, shape_type=None):
 
 
 def shape_to_mask(
-    img_shape, points, shape_type=None, line_width=10, point_size=5
+        img_shape, points, shape_type=None, line_width=10, point_size=5
 ):
     mask = np.zeros(img_shape[:2], dtype=np.uint8)
     mask = PIL.Image.fromarray(mask)

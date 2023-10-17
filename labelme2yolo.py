@@ -84,8 +84,8 @@ class Labelme2YOLO(object):
         
         self._make_train_val_dir()
     
-        # convert labelme object to yolo format object, and save them to files
-        # also get image from labelme json file and save them under images folder
+        # convert labelimg object to yolo format object, and save them to files
+        # also get image from labelimg json file and save them under images folder
         for target_dir, json_names in zip(('train/', 'val/'), 
                                           (train_json_names, val_json_names)):
             for json_name in json_names:
@@ -126,7 +126,7 @@ class Labelme2YOLO(object):
         
         img_h, img_w, _ = cv2.imread(img_path).shape
         for shape in json_data['shapes']:
-            # labelme circle shape is different from others
+            # labelimg circle shape is different from others
             # it only has 2 points, 1st is circle center, 2nd is drag end point
             if shape['shape_type'] == 'circle':
                 yolo_obj = self._get_circle_shape_yolo_object(shape, img_h, img_w)
@@ -251,7 +251,7 @@ class Labelme2YOLO(object):
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser()
     # parser.add_argument('--json_dir',type=str,default='data_annotated/',
-    #                     help='Please input the path of the labelme json files.')
+    #                     help='Please input the path of the labelimg json files.')
     # parser.add_argument('--val_size',type=float, nargs='?', default=None,
     #                     help='Please input the validation dataset size, for example 0.1 ')
     # parser.add_argument('--json_name',type=str, nargs='?', default=None,

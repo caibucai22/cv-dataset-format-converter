@@ -62,8 +62,8 @@ class COCO2YOLO():
         # 是否创建文件夹
         # utils.make_dirs()
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
-        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
+        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelimg')
+        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelimg')
 
     def get_label_id_map(self, json_dir):
         label_set = set()
@@ -104,7 +104,7 @@ class COCO2YOLO():
 
         img_h, img_w, _ = cv2.imread(img_path).shape
         for shape in json_data['shapes']:
-            # labelme circle shape is different from others
+            # labelimg circle shape is different from others
             # it only has 2 points, 1st is circle center, 2nd is drag end point
             if shape['shape_type'] == 'circle':
                 yolo_obj = self.get_yolo_circle_object(shape, img_h, img_w)

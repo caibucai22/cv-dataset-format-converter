@@ -36,7 +36,7 @@ class Labelimg2COCO():
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
-        self.source_dataset_type = 'labelme'
+        self.source_dataset_type = 'labelimg'
         self.dst_dataset_type = 'coco'
         self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
         [0])
@@ -70,8 +70,8 @@ class Labelimg2COCO():
         print('src dir struct:')
         utils.print_dirs_info(source_dir)
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
-        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
+        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelimg')
+        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelimg')
         self.dst_template = self.generate_template(COCO_Meta)
 
         # 划分数据集
@@ -279,6 +279,6 @@ class Labelimg2COCO():
 
 
 if __name__ == '__main__':
-    convertor = Labelme2COCO(source_dir='../exp_dataset/labelme2', dst_dir='../exp_dataset/TDataset',
+    convertor = Labelme2COCO(source_dir='../exp_dataset/labelimg2', dst_dir='../exp_dataset/TDataset',
                              ann_image_together=False)
     convertor.generate_template(COCO_Meta)

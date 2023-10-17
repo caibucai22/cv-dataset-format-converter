@@ -27,7 +27,7 @@ class Labelimg2Dota():
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
-        self.source_dataset_type = 'labelme'
+        self.source_dataset_type = 'labelimg'
         self.dst_dataset_type = 'dota'
         self.diffculty = 0
         self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
@@ -56,8 +56,8 @@ class Labelimg2Dota():
         # 是否创建文件夹
         # utils.make_dirs()
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
-        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
+        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelimg')
+        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelimg')
 
     def get_label_id_map(self, json_dir):
         label_set = set()

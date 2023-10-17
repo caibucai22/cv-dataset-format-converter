@@ -26,7 +26,7 @@ class Labelimg2YOLO():
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
-        self.source_dataset_type = 'labelme'
+        self.source_dataset_type = 'labelimg'
         self.dst_dataset_type = 'yolo'
         self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
         [0])
@@ -53,8 +53,8 @@ class Labelimg2YOLO():
         # 是否创建文件夹
         # utils.make_dirs()
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
-        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
+        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelimg')
+        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelimg')
 
     def get_label_id_map(self, json_dir):
         label_set = set()
@@ -95,7 +95,7 @@ class Labelimg2YOLO():
 
         img_h, img_w, _ = cv2.imread(img_path).shape
         for shape in json_data['shapes']:
-            # labelme circle shape is different from others
+            # labelimg circle shape is different from others
             # it only has 2 points, 1st is circle center, 2nd is drag end point
             if shape['shape_type'] == 'circle':
                 yolo_obj = self.get_yolo_circle_object(shape, img_h, img_w)
@@ -212,5 +212,5 @@ class Labelimg2YOLO():
 
 
 if __name__ == '__main__':
-    convertor = Labelme2YOLO(source_dir='../exp_dataset/labelme_test',dst_dir='../exp_dataset/TDataset')
+    convertor = Labelimg2YOLO(source_dir='../exp_dataset/labelme_test',dst_dir='../exp_dataset/TDataset')
     convertor.convert()

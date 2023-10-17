@@ -12,6 +12,7 @@ from meta.Dataset_Meta import *
 from utils import Exception as Exception_Define
 import utils
 
+
 def print_dirs_info(source_dir, display=True):
     cur_dirs = []
     for root, dirs, files in os.walk(source_dir):
@@ -32,11 +33,11 @@ def check_and_create_dir(dst_dataset_type, dst_dir):
         #     shutil.rmtree(os.path.join(dst_dir,))
         for dir in cur_dirs:
             # 不为空也可删
-            if os.path.exists(os.path.join(dst_dir,dir)):
+            if os.path.exists(os.path.join(dst_dir, dir)):
                 shutil.rmtree(os.path.join(dst_dir, dir))
         # 创建目标数据集格式文件夹
         for dir in dst_dirs:
-            os.mkdir(os.path.join(dst_dir, dir))
+            os.makedirs(os.path.join(dst_dir, dir))
 
 
 def get_imgs(source_dir, dataset_type):
@@ -45,10 +46,12 @@ def get_imgs(source_dir, dataset_type):
         pass
     elif dataset_type == 'yolo':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
-    elif dataset_type == 'labelme':
+    elif dataset_type == 'labelimg':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
     elif dataset_type == 'dota':
         imgs = getImageListFromMulti(source_dir, dataset_type='dota')
+    elif dataset_type == 'voc':
+        imgs = getImageListFromMulti(source_dir, dataset_type='voc')
     else:
         raise Exception(Exception_Define.UNSUPPORTED_DATASET_TYPE)
     return sorted(imgs), len(imgs),
@@ -61,10 +64,12 @@ def get_Anns(source_dir, dataset_type='coco'):
         pass
     elif dataset_type == 'yolo':
         anns = getAnnListFromMulti(source_dir, dataset_type='yolo')
-    elif dataset_type == 'labelme':
-        anns = getAnnListFromMulti(source_dir, dataset_type='labelme')
+    elif dataset_type == 'labelimg':
+        anns = getAnnListFromMulti(source_dir, dataset_type='labelimg')
     elif dataset_type == 'dota':
         anns = getAnnListFromMulti(source_dir, dataset_type='dota')
+    elif dataset_type == 'voc':
+        anns = getAnnListFromMulti(source_dir, dataset_type='voc')
     else:
         raise Exception(Exception_Define.UNSUPPORTED_DATASET_TYPE)
     return anns, len(anns),
@@ -74,7 +79,7 @@ def check_anno_file_exist(source_dir, type, exist_with_img=True):
     if type == 'coco':
         if os.path.exists(os.path.join(source_dir, 'annotations', 'annotation.json')):
             return True
-    elif type == 'labelme':
+    elif type == 'labelimg':
         if exist_with_img:
             pass
         else:
@@ -136,17 +141,28 @@ def get_label_id_map_with_txt(label_txt_path):
     return class_name2id, class_id2name
 
 
+def clear_hidden_files(path):
+    dir_list = os.listdir(path)
+    for i in dir_list:
+        abspath = os.path.join(os.path.abspath(path), i)
+        if os.path.isfile(abspath):
+            if i.startswith("._"):
+                os.remove(abspath)
+        else:
+            clear_hidden_files(abspath)
+
+
 if __name__ == '__main__':
     # test
     # print_dirs_info('./exp_dataset')
-    source_dir = '../exp_dataset/labelme'
+    source_dir = '../exp_dataset/labelimg'
     # img_list = getImageListFromMulti('./exp_dataset/yolo', dataset_type='yolo')
     # print(img_list)
     # ann_list = getAnnListFromMulti('./exp_dataset/yolo',dataset_type='yolo')
     # print(ann_list)
 
-    # imgs_list, imgs_len = get_imgs(source_dir, dataset_type='labelme')
-    # anns_list, anns_len = get_Anns(source_dir, dataset_type='labelme')
+    # imgs_list, imgs_len = get_imgs(source_dir, dataset_type='labelimg')
+    # anns_list, anns_len = get_Anns(source_dir, dataset_type='labelimg')
     # print(imgs_list)
     # print(anns_list)
     # test
@@ -155,4 +171,3 @@ if __name__ == '__main__':
     # print(class_id2name)
 
     print_dirs_info(source_dir='../exp_dataset/yolo')
-
