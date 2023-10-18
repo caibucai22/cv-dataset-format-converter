@@ -1,0 +1,113 @@
+{
+  "info": {
+    "description": "",
+    "url": "",
+    "version": "",
+    "year": 2021,
+    "contributor": "",
+    "date_created": "2021-07-25"
+  },
+  "licenses": [
+    {
+      "id": 1,
+      "name": null,
+      "url": null
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "bump",
+      "supercategory": "None"
+    },
+    {
+      "id": 2,
+      "name": "wrinkle",
+      "supercategory": "None"
+    },
+    {
+      "id": 3,
+      "name": "scratch",
+      "supercategory": "None"
+    },
+    {
+      "id": 4,
+      "name": "rust",
+      "supercategory": "None"
+    },
+    {
+      "id": 5,
+      "name": "pit",
+      "supercategory": "None"
+    },
+    {
+      "id": 6,
+      "name": "broken_edge",
+      "supercategory": "None"
+    }
+  ],
+  "images": [
+    {
+      "file_name": "1.bmp",
+      "height": 640,
+      "width": 640,
+      "date_captured": "2021-07-25",
+      "id": 0,
+      "license": 1,
+      "color_url": "",
+      "flickr_url": ""
+    }
+  ],
+  "annotations": [
+    {
+      "id": 0,
+      "image_id": 0,
+      "category_id": 2,
+      "iscrowd": 0,
+      "area": 12816,
+      "bbox": [
+        300,
+        249,
+        144.0,
+        89.0
+      ],
+      "segmentation": [
+        [
+          300,
+          249,
+          444,
+          249,
+          444,
+          338,
+          300,
+          338
+        ]
+      ]
+    },
+    {
+      "id": 1,
+      "image_id": 0,
+      "category_id": 2,
+      "iscrowd": 0,
+      "area": 20160,
+      "bbox": [
+        195,
+        468,
+        140.0,
+        144.0
+      ],
+      "segmentation": [
+        [
+          195,
+          468,
+          335,
+          468,
+          335,
+          612,
+          195,
+          612
+        ]
+      ]
+    }
+  ]
+}

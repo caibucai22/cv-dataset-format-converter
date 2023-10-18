@@ -25,8 +25,11 @@ def print_dirs_info(source_dir, display=True):
 
 def check_and_create_dir(dst_dataset_type, dst_dir):
     cur_dirs = print_dirs_info(dst_dir)
-    dst_dirs = Dataset_setting[dst_dataset_type]['dirs']
-    if len(dst_dirs) != len(cur_dirs):
+    if dst_dataset_type in ['coco']:
+        dst_dirs = Dataset_setting[dst_dataset_type]['no_split_dirs']
+    else:
+        dst_dirs = Dataset_setting[dst_dataset_type]['dirs']
+    if len(dst_dirs) != len(cur_dirs) or dst_dirs != cur_dirs:
         # 移除已有文件夹
         # a,b = len(dst_dirs),len(cur_dirs)
         # while b > 0:

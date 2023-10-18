@@ -63,4 +63,5 @@ voc
 做 图像预处理增强 集成 包括 图像切片 ...
 
 UI
-添加 ann_img_together 按钮
+1. 添加 ann_img_together 按钮
+2. 数据处理完成，自动打开保存文件夹窗口
