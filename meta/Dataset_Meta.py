@@ -37,7 +37,7 @@ Dataset_setting = {
         }
 }
 
-
+TDATASET_PATH='../exp_dataset/TDataset'
 class Constant():
 
     def __init__(self):

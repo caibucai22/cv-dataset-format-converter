@@ -21,7 +21,7 @@ import utils
 from utils.Exception import *
 
 
-class Labelimg2Dota():
+class Labelimg2DOTA():
 
     def __init__(self, source_dir, dst_dir, ann_image_together=True):
         self.source_dir = source_dir

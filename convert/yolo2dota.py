@@ -14,7 +14,7 @@ import utils
 from meta.Dataset_Meta import Dataset_setting
 
 
-class Yolo2Dota():
+class YOLO2DOTA():
 
     def __init__(self, source_dir, dst_dir,
                  source_dataset_type, dst_datatset_type,

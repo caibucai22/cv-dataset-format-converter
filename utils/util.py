@@ -132,6 +132,28 @@ def save_dota_image(json_data, img_name, source_images_dir_path, dst_images_dir_
     return dst_img_path
 
 
+def check_classes_txt(source_path):
+    classes_txt_path = source_path + '/' + 'classes.txt'
+    if not os.path.exists(classes_txt_path):
+        raise Exception(Exception_Define.NOT_PROVIDE_CLASSES_TXT)
+    return classes_txt_path
+
+
+def check_img_ann_together(source_path):
+    images_dir_exist = False
+    annos_dir_exist = False
+    for root, dirs, files in os.walk(source_dir):
+        # print(root)
+        for name in dirs:
+            # print('dir: \t\t\t', name)
+            if name in ['images', 'JPEGImages']:
+                images_dir_exist = True
+            if name in ['labels', 'labelTxt', 'annotations', 'Annotations']:
+                annos_dir_exist = True
+
+    return images_dir_exist and annos_dir_exist
+
+
 def get_label_id_map_with_txt(label_txt_path):
     class_id2name = {}
     class_name2id = {}
@@ -158,7 +180,7 @@ def clear_hidden_files(path):
 if __name__ == '__main__':
     # test
     # print_dirs_info('./exp_dataset')
-    source_dir = '../exp_dataset/labelimg'
+    source_dir = '../exp_dataset/yolo'
     # img_list = getImageListFromMulti('./exp_dataset/yolo', dataset_type='yolo')
     # print(img_list)
     # ann_list = getAnnListFromMulti('./exp_dataset/yolo',dataset_type='yolo')
@@ -173,4 +195,6 @@ if __name__ == '__main__':
     # print(class_name2id)
     # print(class_id2name)
 
-    print_dirs_info(source_dir='../exp_dataset/yolo')
+    # print_dirs_info(source_dir='../exp_dataset/yolo')
+    exist = check_img_ann_together(source_dir)
+    print(exist)

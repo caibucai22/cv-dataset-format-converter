@@ -1,65 +1,159 @@
-from convert.labelimg2dota import Labelimg2Dota
+from convert.coco2yolo import COCO2YOLO
+from convert.dota2yolo import DOTA2YOLO
+from convert.labelimg2coco import Labelimg2COCO
+from convert.labelimg2dota import Labelimg2DOTA
+from convert.labelimg2yolo import Labelimg2YOLO
+from convert.voc2yolo import VOC2YOLO
+from convert.yolo2coco import YOLO2COCO
+from convert.yolo2dota import YOLO2DOTA
+from convert.yolo2voc import YOLO2VOC
+
+from meta.Dataset_Meta import *
 
 
-def dota2voc():
+def dota2voc(source_dir, dst_dir,
+             source_dataset_type, dst_datatset_type,
+             source_labels_txt_path=None,
+             ann_image_together=False, test_size=0.1,
+             val_size=0.11):
     '''
     dota -> yolo -> voc
     '''
     print('data2data is not supported yet')
+    dota2yolo = DOTA2YOLO(source_dir, TDATASET_PATH,
+                          source_dataset_type='dota', dst_datatset_type='yolo',
+                          source_labels_txt_path=source_dir)
+    yolo2voc = YOLO2VOC(TDATASET_PATH, dst_dir,
+                        source_dataset_type='yolo', dst_datatset_type='voc',
+                        source_labels_txt_path=TDATASET_PATH)
 
-    pass
+    dota2yolo.convert()
+    yolo2voc.convert()
 
 
-def dota2coco():
+def dota2coco(source_dir, dst_dir,
+              source_dataset_type, dst_datatset_type,
+              source_labels_txt_path=None,
+              ann_image_together=False, test_size=0.1,
+              val_size=0.11):
     '''
     dota -> yolo -> coco
     '''
-    print('data2data is not supported yet')
-    pass
+
+    dota2yolo = DOTA2YOLO(source_dir, TDATASET_PATH,
+                          source_dataset_type='dota', dst_datatset_type='yolo',
+                          source_labels_txt_path=source_dir)
+    yolo2coco = YOLO2COCO(TDATASET_PATH, dst_dir,
+                          source_dataset_type='yolo', dst_datatset_type='coco',
+                          source_labels_txt_path=TDATASET_PATH)
+
+    dota2yolo.convert()
+    yolo2coco.convert()
 
 
-def dota2yolo(souce_dir, dst_dir,
+def dota2yolo(source_dir, dst_dir,
               source_dataset_type, dst_datatset_type,
               source_labels_txt_path=None,
               ann_image_together=False, test_size=0.1,
               val_size=0.11
               ):
-    print('data2data is not supported yet')
-    pass
-
-def voc2dota():
-    print('data2data is not supported yet')
-    pass
+    dota2yolo = DOTA2YOLO(source_dir, dst_dir,
+                          source_dataset_type='dota', dst_datatset_type='yolo',
+                          source_labels_txt_path=source_dir)
+    dota2yolo.convert()
 
 
-def voc2coco():
-    print('data2data is not supported yet')
-    pass
+def voc2dota(source_dir, dst_dir,
+             source_dataset_type, dst_datatset_type,
+             source_labels_txt_path=None,
+             ann_image_together=False, test_size=0.1,
+             val_size=0.11):
+    '''
+    voc -> yolo -> dota
+    '''
+    voc2yolo = VOC2YOLO(source_dir, TDATASET_PATH,
+                        source_dataset_type='voc', dst_datatset_type='yolo',
+                        source_labels_txt_path=source_dir)
+
+    yolo2dota = YOLO2DOTA(TDATASET_PATH, dst_dir,
+                          source_dataset_type='yolo', dst_datatset_type='dota',
+                          source_labels_txt_path=source_dir
+                          )
+    voc2yolo.convert()
+    yolo2dota.convert()
 
 
-def voc2yolo():
-    print('data2data is not supported yet')
-    pass
+def voc2coco(source_dir, dst_dir,
+             source_dataset_type, dst_datatset_type,
+             source_labels_txt_path=None,
+             ann_image_together=False, test_size=0.1,
+             val_size=0.11):
+    '''
+    voc -> yolo -> coco
+    :return:
+    '''
+    voc2yolo = VOC2YOLO(source_dir, TDATASET_PATH,
+                        source_dataset_type='voc', dst_datatset_type='yolo',
+                        source_labels_txt_path=source_dir)
+    yolo2coco = YOLO2COCO(TDATASET_PATH, dst_dir,
+                          source_dataset_type='yolo', dst_datatset_type='coco',
+                          source_labels_txt_path=TDATASET_PATH)
+    voc2yolo.convert()
+    yolo2coco.convert()
 
 
+def voc2yolo(source_dir, dst_dir,
+             source_dataset_type, dst_datatset_type,
+             source_labels_txt_path=None,
+             ann_image_together=False, test_size=0.1,
+             val_size=0.11):
+    voc2yolo = VOC2YOLO(source_dir, dst_dir,
+                        source_dataset_type='voc', dst_datatset_type='yolo',
+                        source_labels_txt_path=source_dir)
+    voc2yolo.convert()
 
-def coco2dota():
+
+def coco2dota(source_dir, dst_dir,
+              source_dataset_type, dst_datatset_type,
+              source_labels_txt_path=None,
+              ann_image_together=False, test_size=0.1,
+              val_size=0.11):
     '''
     coco -> yolo -> dota
     :return:
     '''
-    print('data2data is not supported yet')
-    pass
+    coco2yolo = COCO2YOLO(source_dir, TDATASET_PATH,
+                          source_dataset_type='coco', dst_datatset_type='yolo',
+                          source_labels_txt_path=source_dir)
+
+    yolo2dota = YOLO2DOTA(TDATASET_PATH, dst_dir,
+                          source_dataset_type='yolo', dst_datatset_type='dota',
+                          source_labels_txt_path=source_dir
+                          )
+
+    coco2yolo.convert()
+    yolo2dota.convert()
 
 
-def coco2voc():
-    print('data2data is not supported yet')
-    pass
+def coco2voc(source_dir, dst_dir,
+             source_dataset_type, dst_datatset_type,
+             source_labels_txt_path=None,
+             ann_image_together=False, test_size=0.1,
+             val_size=0.11):
+    coco2yolo = COCO2YOLO(source_dir, TDATASET_PATH,
+                          source_dataset_type='coco', dst_datatset_type='yolo',
+                          source_labels_txt_path=source_dir)
+    yolo2voc = YOLO2VOC(TDATASET_PATH, dst_dir)
+
+    coco2yolo.convert()
+    yolo2voc.convert()
 
 
-def coco2yolo(souce_dir, dst_dir, ann_img_together):
-    print('data2data is not supported yet')
-    pass
+def coco2yolo(source_dir, dst_dir, ann_img_together):
+    coco2yolo = COCO2YOLO(source_dir, TDATASET_PATH,
+                          source_dataset_type='coco', dst_datatset_type='yolo',
+                          source_labels_txt_path=source_dir)
+    coco2yolo.convert()
 
 
 def yolo2dota(source_dir, dst_dir,
@@ -67,39 +161,68 @@ def yolo2dota(source_dir, dst_dir,
               source_labels_txt_path=None,
               ann_image_together=False, test_size=0.1,
               val_size=0.11):
-    print('data2data is not supported yet')
-    pass
+    yolo2dota = YOLO2DOTA(source_dir, dst_dir,
+                          source_dataset_type='yolo', dst_datatset_type='dota',
+                          source_labels_txt_path=source_dir
+                          )
+    yolo2dota.convert()
 
 
-def yolo2voc():
-    print('data2data is not supported yet')
-    pass
+def yolo2voc(source_dir, dst_dir,
+             source_dataset_type, dst_datatset_type,
+             source_labels_txt_path=None,
+             ann_image_together=False, test_size=0.1,
+             val_size=0.11):
+    yolo2voc = YOLO2VOC(source_dir, dst_dir)
+    yolo2voc.convert()
 
 
-def yolo2coco():
-    print('data2data is not supported yet')
-    pass
+def yolo2coco(source_dir, dst_dir,
+              source_dataset_type, dst_datatset_type,
+              source_labels_txt_path=None,
+              ann_image_together=False, test_size=0.1,
+              val_size=0.11):
+    yolo2coco = YOLO2COCO(source_dir, dst_dir,
+                          source_labels_txt_path=source_dir)
+    yolo2coco.convert()
 
 
-def labelimg2dota(source_dir, dst_dir, ann_image_together=True):
-    Labelimg2Dota(source_dir, dst_dir, ann_image_together).convert()
+def labelimg2dota(source_dir, dst_dir,
+                  source_dataset_type, dst_datatset_type,
+                  source_labels_txt_path=None,
+                  ann_image_together=False, test_size=0.1,
+                  val_size=0.11):
+    Labelimg2DOTA(source_dir, dst_dir, ann_image_together).convert()
 
 
-def labelimg2yolo(source_dir, dst_dir, ann_image_together=True):
+def labelimg2yolo(source_dir, dst_dir,
+                  source_dataset_type, dst_datatset_type,
+                  source_labels_txt_path=None,
+                  ann_image_together=False, test_size=0.1,
+                  val_size=0.11):
     print('labelimg2yolo is not supported yet')
     pass
 
 
-def labelimg2voc(source_dir, dst_dir, ann_image_together=True):
-    print('labelimg2voc is not supported yet')
-    pass
+def labelimg2voc(source_dir, dst_dir,
+                 source_dataset_type, dst_datatset_type,
+                 source_labels_txt_path=None,
+                 ann_image_together=False, test_size=0.1,
+                 val_size=0.11):
+    labelimg2yolo = Labelimg2YOLO(source_dir, dst_dir,
+                                  source_dataset_type='labelimg', dst_datatset_type='coco',
+                                  source_labels_txt_path=source_dir)
+
+    labelimg2coco.convert()
 
 
 def labelimg2coco(source_dir, dst_dir,
-                  source_labels_txt_path,
-                  ann_image_together=True,
-                  test_size=0.1,
+                  source_dataset_type, dst_datatset_type,
+                  source_labels_txt_path=None,
+                  ann_image_together=False, test_size=0.1,
                   val_size=0.11
                   ):
-    print('labelimg2coco is not supported yet')
-    pass
+    labelimg2coco = Labelimg2COCO(source_dir, dst_dir,
+                                  source_dataset_type='labelimg', dst_datatset_type='coco',
+                                  source_labels_txt_path=source_dir)
+    labelimg2coco.convert()

@@ -13,3 +13,5 @@ UNSUPPORTED_SHAPE_TYPE = "unsupported shape type"
 NUM_OF_IMAGES_AND_LABELS_NOT_MATCH = 'the num of images and labels not match'
 
 FAILED_OPENING_IMAGE = "failed opening image"
+
+NOT_PROVIDE_CLASSES_TXT = 'not provide classes.txt'

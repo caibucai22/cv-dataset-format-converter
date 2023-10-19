@@ -15,7 +15,7 @@ from collections import OrderedDict
 import utils
 from meta.Dataset_Meta import Dataset_setting
 
-class Dota2Yolo():
+class DOTA2YOLO():
 
     def __init__(self, source_dir, dst_dir,
                  source_dataset_type, dst_datatset_type,
