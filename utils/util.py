@@ -176,6 +176,8 @@ def clear_hidden_files(path):
         else:
             clear_hidden_files(abspath)
 
+def filter_annotations(annotations, image_ids):
+    return [ann for ann in annotations if ann["image_id"] in image_ids]
 
 if __name__ == '__main__':
     # test
