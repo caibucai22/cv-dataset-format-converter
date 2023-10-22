@@ -254,22 +254,22 @@ class Ui_Main(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.file_conversion_radioButton.setText(
-            QCoreApplication.translate("MainWindow", u"\u6587\u4ef6\u8f6c\u6362  ", None))
+            QCoreApplication.translate("MainWindow", "数据集转换  ", None))
         self.dataset_conversion_radioButton.setText(
-            QCoreApplication.translate("MainWindow", u"\u6570\u636e\u96c6\u8f6c\u6362\u4e0e\u5212\u5206", None))
+            QCoreApplication.translate("MainWindow", u"数据集划分", None))
         self.src_format_label.setText(QCoreApplication.translate("MainWindow", u"\u6e90\u6837\u5f0f", None))
         self.src_format_comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"DOTA", None))
         self.src_format_comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"VOC", None))
         self.src_format_comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"COCO", None))
         self.src_format_comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"YOLO", None))
-        self.src_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"labelimg", None))
+        self.src_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Labelimg", None))
 
         self.dst_format_label.setText(QCoreApplication.translate("MainWindow", u"\u76ee\u6807\u6837\u5f0f", None))
         self.dst_format_comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"DOTA", None))
         self.dst_format_comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"VOC", None))
         self.dst_format_comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"COCO", None))
         self.dst_format_comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"YOLO", None))
-        self.dst_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"labelimg", None))
+        self.dst_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Labelimg", None))
 
         self.divide_proportion_label.setText(
             QCoreApplication.translate("MainWindow", u"\u5212\u5206\u6bd4\u4f8b", None))
@@ -297,9 +297,9 @@ class Ui_Main(object):
         print("开始转换按钮被点击")
 
         user_input = self.get_all_input()
-        if user_input.file_operation_type == Ui_Main_UserInput.Operation_Type.FILE:
-            print("文件转换")
-        elif user_input.file_operation_type == Ui_Main_UserInput.Operation_Type.DATASET:
+        if user_input.file_operation_type == Ui_Main_UserInput.Operation_Type.DATASET:
+            print("数据集划分")
+        elif user_input.file_operation_type == Ui_Main_UserInput.Operation_Type.FILE :
             print("数据集转换")
             format_funcs = {
                 (Ui_Main_UserInput.Dataset_Format.DOTA, Ui_Main_UserInput.Dataset_Format.VOC): dota2voc,
@@ -328,6 +328,7 @@ class Ui_Main(object):
             if func:
                 print("开始转换")
                 func(user_input.src_path, user_input.dst_path)
+                self.on_view_result_clicked()
             else:
                 print("不支持的格式转换")
 

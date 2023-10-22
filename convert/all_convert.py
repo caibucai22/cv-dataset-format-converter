@@ -10,6 +10,17 @@ from convert.yolo2voc import YOLO2VOC
 
 from meta.Dataset_Meta import *
 
+def dota2labelimg():
+    pass
+
+def voc2labelimg():
+    pass
+
+def coco2labelimg():
+    pass
+
+def yolo2labelimg():
+    pass
 
 def dota2voc(source_dir, dst_dir,
              source_dataset_type, dst_datatset_type,
@@ -52,14 +63,14 @@ def dota2coco(source_dir, dst_dir,
 
 
 def dota2yolo(source_dir, dst_dir,
-              source_dataset_type, dst_datatset_type,
+              source_dataset_type='dota', dst_datatset_type='yolo',
               source_labels_txt_path=None,
               ann_image_together=False, test_size=0.1,
               val_size=0.11
               ):
     dota2yolo = DOTA2YOLO(source_dir, dst_dir,
                           source_dataset_type='dota', dst_datatset_type='yolo',
-                          source_labels_txt_path=source_dir)
+                          source_labels_txt_path=source_dir+'/classes.txt')
     dota2yolo.convert()
 
 

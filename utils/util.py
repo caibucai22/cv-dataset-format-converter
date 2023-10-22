@@ -157,7 +157,7 @@ def check_img_ann_together(source_path):
 def get_label_id_map_with_txt(label_txt_path):
     class_id2name = {}
     class_name2id = {}
-    for i, line in enumerate(open(label_txt_path).readlines()):
+    for i, line in enumerate(open(label_txt_path,'r').readlines()):
         class_id = i  # starts with -1
         class_name = line.strip()
 

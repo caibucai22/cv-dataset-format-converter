@@ -25,8 +25,8 @@ from meta.Dataset_Meta import *
 import utils
 from utils.Exception import *
 from meta import COCO_Meta
-import label_file as labelfile
-
+# import label_file as labelfile
+from convert import label_file as labelfile
 
 class Labelimg2COCO():
 
