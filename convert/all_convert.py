@@ -88,7 +88,7 @@ def voc2dota(source_dir, dst_dir,
 
     yolo2dota = YOLO2DOTA(TDATASET_PATH, dst_dir,
                           source_dataset_type='yolo', dst_datatset_type='dota',
-                          source_labels_txt_path=source_dir
+                          source_labels_txt_path=TDATASET_PATH+'/classes.txt'
                           )
     voc2yolo.convert()
     yolo2dota.convert()
@@ -114,13 +114,13 @@ def voc2coco(source_dir, dst_dir,
 
 
 def voc2yolo(source_dir, dst_dir,
-             source_dataset_type, dst_datatset_type,
+             source_dataset_type='voc', dst_datatset_type='yolo',
              source_labels_txt_path=None,
              ann_image_together=False, test_size=0.1,
              val_size=0.11):
     voc2yolo = VOC2YOLO(source_dir, dst_dir,
                         source_dataset_type='voc', dst_datatset_type='yolo',
-                        source_labels_txt_path=source_dir)
+                        source_labels_txt_path=source_dir+'/classes.txt')
     voc2yolo.convert()
 
 
@@ -180,11 +180,12 @@ def yolo2dota(source_dir, dst_dir,
 
 
 def yolo2voc(source_dir, dst_dir,
-             source_dataset_type, dst_datatset_type,
+             source_dataset_type='yolo', dst_dataset_type='voc',
              source_labels_txt_path=None,
              ann_image_together=False, test_size=0.1,
              val_size=0.11):
-    yolo2voc = YOLO2VOC(source_dir, dst_dir)
+    yolo2voc = YOLO2VOC(source_dir, dst_dir,
+                        source_labels_txt_path=source_dir+'/classes.txt')
     yolo2voc.convert()
 
 

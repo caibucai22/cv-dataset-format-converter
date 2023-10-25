@@ -41,6 +41,7 @@ def bbox_dota2yolo(points, img_w, img_h):
 
 
 def bbox_voc2yolo(size, box):
+    # xmin, xmax, ymin, ymax = box
     dw = 1. / size[0]
     dh = 1. / size[1]
     x = (box[0] + box[1]) / 2.0

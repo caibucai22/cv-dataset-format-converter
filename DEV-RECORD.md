@@ -26,7 +26,7 @@ voc2yolo
 -[x] yolo2coco
 -[x] yolo2dota
 -[] yolo2labelimg
-yolo2voc
+-[x] yolo2voc
 
 ## 支持数据源
 1. 来自 labelimg 

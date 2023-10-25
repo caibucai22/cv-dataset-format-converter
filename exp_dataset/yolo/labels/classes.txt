@@ -1,2 +1,6 @@
-wire
-belt
+bump
+wrinkle
+scratch
+rust
+pit
+broken_edge
