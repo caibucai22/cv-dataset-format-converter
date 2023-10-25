@@ -9,7 +9,7 @@
 
 Dataset_setting = {
     'coco': {
-        'img_types': [],
+        'img_types': ['.jpg','.png','.bmp'],
         'anno_type': '.json',
         'no_split_dirs':['images','annotations'],
         'dirs': ['train', 'val', 'test', 'annotations']

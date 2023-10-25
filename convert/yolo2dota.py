@@ -108,6 +108,6 @@ class YOLO2DOTA():
 
 if __name__ == '__main__':
     convert = Yolo2Dota(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/dota',
-                        source_labels_txt_path='../exp_dataset/yolo/classes.txt',
+                        source_labels_txt_path='../exp_dataset/yolo/labels/classes.txt',
                         source_dataset_type='yolo', dst_datatset_type='dota')
     convert.convert()

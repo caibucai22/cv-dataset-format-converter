@@ -8,24 +8,24 @@
 
 ### 2023.10.22 test
 coco2dota
-coco2labelimg
+-[] coco2labelimg
 coco2voc
-coco2yolo
+-[x] coco2yolo
 dota2coco
-dota2labelimg
+-[] dota2labelimg
 dota2voc
-dota2yolo
+-[x] dota2yolo
 labelimg2coco
 labelimg2dota
 labelimg2voc
 labelimg2yolo
 voc2coco
 voc2dota
-voc2labelimg
+-[] voc2labelimg
 voc2yolo
-yolo2coco
+-[x] yolo2coco
 -[x] yolo2dota
-yolo2labelimg
+-[] yolo2labelimg
 yolo2voc
 
 ## 支持数据源

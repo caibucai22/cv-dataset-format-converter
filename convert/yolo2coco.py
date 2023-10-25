@@ -96,16 +96,18 @@ class YOLO2COCO():
                     class_id, x, y, w, h = line.strip().split(' ')
                     class_id, x, y, w, h = int(class_id), float(x), float(y), float(w), float(h)
 
-                    xmin, ymin, xmax, ymax = utils.bbox_yolo2voc(x, y, w, h, img_w, img_h)
-                    w = w * img_w
-                    h = h * img_h
+                    xmin, ymin, w, h = utils.bbox_yolo2coco(x, y, w, h, img_w, img_h)
+                    xmax = xmin+w
+                    ymax = ymin+h
+                    # w = w * img_w
+                    # h = h * img_h
 
                     bbox_dict['id'] = i * 10000 + j  # bounding box的坐标信息
                     bbox_dict['image_id'] = i
                     bbox_dict['category_id'] = class_id + 1  # plus 1
                     bbox_dict['iscrowd'] = 0
-                    height, width = abs(ymax - ymin), abs(xmax - xmin)
-                    bbox_dict['area'] = height * width
+                    # height, width = abs(ymax - ymin), abs(xmax - xmin)
+                    bbox_dict['area'] = w * h
                     bbox_dict['bbox'] = [xmin, ymin, w, h]
                     bbox_dict['segmentation'] = [[xmin, ymin, xmax, ymin, xmax, ymax, xmin, ymax]]
 
@@ -114,11 +116,11 @@ class YOLO2COCO():
             shutil.copy(self.source_images_dir_path + "/" + img_name, self.dst_images_dir_path + "/" + img_name)
 
         shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
-        with open(self.dst_labels_dir_path + '/' + "annotations2" + '.json', 'w') as anno_file:
+        with open(self.dst_labels_dir_path + '/' + "annotations" + '.json', 'w') as anno_file:
             json.dump(write_json_context, anno_file, indent=2)
 
 
 if __name__ == '__main__':
     convertor = YOLO2COCO(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/TDataset',
-                          source_labels_txt_path='../exp_dataset/yolo/classes.txt')
+                          source_labels_txt_path='../exp_dataset/yolo/labels/classes.txt')
     convertor.convert()

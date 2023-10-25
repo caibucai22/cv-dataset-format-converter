@@ -103,6 +103,6 @@ class YOLO2VOC():
         print('done!')
 
 if __name__ == '__main__':
-    convertor = YOLO2VOC(source_dir='../exp_dataset/yolo',dst_dir='../exp_dataset/TDataset',
-                         source_labels_txt_path='../exp_dataset/yolo/classes.txt')
+    convertor = YOLO2VOC(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/TDataset',
+                         source_labels_txt_path='../exp_dataset/yolo/labels/classes.txt')
     convertor.convert()

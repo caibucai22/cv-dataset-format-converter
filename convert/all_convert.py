@@ -152,18 +152,18 @@ def coco2voc(source_dir, dst_dir,
              ann_image_together=False, test_size=0.1,
              val_size=0.11):
     coco2yolo = COCO2YOLO(source_dir, TDATASET_PATH,
-                          source_dataset_type='coco', dst_datatset_type='yolo',
-                          source_labels_txt_path=source_dir)
+                          source_dataset_type='coco', dst_dataset_type='yolo',
+                          source_labels_txt_path=source_dir+'classes.txt')
     yolo2voc = YOLO2VOC(TDATASET_PATH, dst_dir)
 
     coco2yolo.convert()
     yolo2voc.convert()
 
 
-def coco2yolo(source_dir, dst_dir, ann_img_together):
-    coco2yolo = COCO2YOLO(source_dir, TDATASET_PATH,
-                          source_dataset_type='coco', dst_datatset_type='yolo',
-                          source_labels_txt_path=source_dir)
+def coco2yolo(source_dir, dst_dir, ann_image_together=False):
+    coco2yolo = COCO2YOLO(source_dir, dst_dir,ann_image_together,
+                          source_dataset_type='coco', dst_dataset_type='yolo',
+                          source_labels_txt_path=source_dir+'/'+'classes.txt')
     coco2yolo.convert()
 
 
@@ -189,12 +189,12 @@ def yolo2voc(source_dir, dst_dir,
 
 
 def yolo2coco(source_dir, dst_dir,
-              source_dataset_type, dst_datatset_type,
+              source_dataset_type='yolo', dst_datatset_type='coco',
               source_labels_txt_path=None,
               ann_image_together=False, test_size=0.1,
               val_size=0.11):
     yolo2coco = YOLO2COCO(source_dir, dst_dir,
-                          source_labels_txt_path=source_dir)
+                          source_labels_txt_path=source_dir+'/classes.txt')
     yolo2coco.convert()
 
 

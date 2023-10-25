@@ -8,6 +8,8 @@ from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel,
                                QWidget, QFileDialog)
 
 from convert.all_convert import *
+import os
+import time
 
 
 class Ui_Main_UserInput:
@@ -328,6 +330,7 @@ class Ui_Main(object):
             if func:
                 print("开始转换")
                 func(user_input.src_path, user_input.dst_path)
+                time.sleep(1.5)
                 self.on_view_result_clicked()
             else:
                 print("不支持的格式转换")

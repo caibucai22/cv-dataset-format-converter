@@ -46,7 +46,7 @@ def check_and_create_dir(dst_dataset_type, dst_dir):
 def get_imgs(source_dir, dataset_type):
     imgs = []
     if dataset_type == 'coco':
-        pass
+        imgs = getImageListFromMulti(source_dir,dataset_type='coco')
     elif dataset_type == 'yolo':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
     elif dataset_type == 'labelimg':
@@ -64,7 +64,7 @@ def get_Anns(source_dir, dataset_type='coco'):
     postfix = Dataset_setting[dataset_type]['anno_type']
     anns = []
     if dataset_type == 'coco':
-        pass
+        anns = getAnnListFromMulti(source_dir,dataset_type='coco')
     elif dataset_type == 'yolo':
         anns = getAnnListFromMulti(source_dir, dataset_type='yolo')
     elif dataset_type == 'labelimg':
@@ -154,11 +154,13 @@ def check_img_ann_together(source_path):
     return images_dir_exist and annos_dir_exist
 
 
-def get_label_id_map_with_txt(label_txt_path):
+def get_label_id_map_with_txt(label_txt_path,dataset_type=None):
     class_id2name = {}
     class_name2id = {}
     for i, line in enumerate(open(label_txt_path,'r').readlines()):
         class_id = i  # starts with -1
+        if dataset_type == 'coco':
+            class_id = i+1
         class_name = line.strip()
 
         class_name2id[class_name] = class_id

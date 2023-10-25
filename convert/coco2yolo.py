@@ -22,17 +22,23 @@ import utils
 
 class COCO2YOLO():
 
-    def __init__(self, source_dir, dst_dir,ann_image_together=True):
+    def __init__(self, source_dir, dst_dir, ann_image_together=False,
+                 source_dataset_type='coco', dst_dataset_type='yolo',
+                 source_labels_txt_path='../exp_dataset/coco/classes.txt'):
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
-        self.source_dataset_type = 'coco'
-        self.dst_dataset_type = 'yolo'
-        self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
-        [0])
+        self.source_dataset_type = source_dataset_type
+        self.dst_dataset_type = dst_dataset_type
+        self.source_images_dir_path = os.path.join(source_dir,
+                                                   Dataset_setting[self.source_dataset_type]['no_split_dirs'][0]
+                                                   )
         self.source_labels_dir_path = self.source_images_dir_path
+        self.source_labels_txt_path = source_labels_txt_path
+
         if not ann_image_together:
-            self.source_labels_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs'][-1])
+            self.source_labels_dir_path = os.path.join(source_dir,
+                                                       Dataset_setting[self.source_dataset_type]['no_split_dirs'][-1])
 
         self.dst_images_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']
         [0])
@@ -41,7 +47,10 @@ class COCO2YOLO():
 
         # 根据用户是否提供
         # 1 遍历得到 2 用户提供
-        self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
+        # self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
+        if self.source_labels_txt_path is not None:
+            self.class_name_to_id, self.class_id_to_name = utils.get_label_id_map_with_txt(
+                self.source_labels_txt_path, dataset_type='coco')
 
         # 打印 源文件夹下 目录情况
         print('src dir struct:')
@@ -53,8 +62,8 @@ class COCO2YOLO():
         # 是否创建文件夹
         # utils.make_dirs()
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelimg')
-        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelimg')
+        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='coco')
+        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='coco')
 
     def get_label_id_map(self, json_dir):
         label_set = set()
@@ -63,7 +72,7 @@ class COCO2YOLO():
             if file_name.endswith('.json'):
                 json_path = os.path.join(json_dir, file_name)
                 json_exist = os.path.exists(json_path)
-                json_file = open(json_path,'r')
+                json_file = open(json_path, 'r')
                 data = json.load(json_file)
                 for shape in data['shapes']:
                     label_set.add(shape['label'])
@@ -72,14 +81,29 @@ class COCO2YOLO():
                             for label_id, label in enumerate(label_set)])
 
     def convert(self):
-        for img_name, json_name in zip(self.imgs_list, self.anns_list):
-            json_path = os.path.join(self.source_labels_dir_path, json_name)
-            json_data = json.load(open(json_path))
+        json_path = os.path.join(self.source_labels_dir_path, 'annotations.json')
+        json_data = json.load(open(json_path,'r'))
+        # 建立图片名到id的映射
+        images_info = json_data['images']
+        image_to_id = {}
+        id_to_ann = {}
+        for image in images_info:
+            image_to_id[image['file_name']] = image['id']
+        # 建立id到annotations的映射
+        anns_info = json_data['annotations']
+        for ann in anns_info:
+            if ann['image_id'] not in id_to_ann:
+                id_to_ann[ann['image_id']] = []
+            id_to_ann[ann['image_id']].append(ann)
+
+        for img_name in self.imgs_list:
+            img_id = image_to_id[img_name]
+            img_ann = id_to_ann[img_id]
 
             img_path = self.save_yolo_image(json_data, img_name,
                                             self.source_images_dir_path, self.dst_images_dir_path)
-            yolo_obj_list = self.get_yolo_object_list(json_data, img_path)
-            self.save_yolo_label(json_name, self.dst_labels_dir_path, yolo_obj_list)
+            yolo_obj_list = self.get_yolo_object_list(img_ann, img_path)
+            self.save_yolo_label(img_name, self.dst_labels_dir_path, yolo_obj_list)
 
     def convert_one(self, json_name):
         json_path = os.path.join(self.source_labels_dir_path, json_name)
@@ -90,23 +114,15 @@ class COCO2YOLO():
         yolo_obj_list = self.get_yolo_object_list(json_data, img_path)
         self.save_yolo_label(json_name, self.dst_labels_dir_path, yolo_obj_list)
 
-    def get_yolo_object_list(self, json_data, img_path):
+    def get_yolo_object_list(self, img_ann, img_path):
         yolo_obj_list = []
 
         img_h, img_w, _ = cv2.imread(img_path).shape
-        for shape in json_data['shapes']:
-            # labelimg circle shape is different from others
-            # it only has 2 points, 1st is circle center, 2nd is drag end point
-            if shape['shape_type'] == 'circle':
-                yolo_obj = self.get_yolo_circle_object(shape, img_h, img_w)
-            elif shape['shape_type'] == 'polygon':  # lll
-                yolo_obj = self.get_yolo_polygon_object(shape, img_h, img_w)
-                yolo_obj_list.append(yolo_obj)
-            elif shape['shape_type'] == 'rectangle':
-                yolo_obj = self.get_other_shape_yolo_object(shape, img_h, img_w)
-                yolo_obj_list.append(yolo_obj)
-
-            # yolo_obj_list.append(yolo_obj)
+        for ann in img_ann:
+            xmin, ymin, w, h = ann['bbox']
+            xc, yc, norm_w, norm_h = utils.bbox_coco2yolo(xmin, ymin, w, h, img_w, img_h)
+            class_id = ann['category_id']-1
+            yolo_obj_list.append([class_id,xc, yc, norm_w, norm_h])
 
         return yolo_obj_list
 
@@ -168,8 +184,8 @@ class COCO2YOLO():
 
         return tuple(label_id_polygon_points)
 
-    def save_yolo_label(self, json_name, label_dir_path, yolo_obj_list):
-        txt_path = os.path.join(label_dir_path, json_name.replace('.json', '.txt'))
+    def save_yolo_label(self, img_name, label_dir_path, yolo_obj_list):
+        txt_path = os.path.join(label_dir_path, img_name[:-4] + '.txt')
 
         with open(txt_path, 'w+') as f:  # lll
             for yolo_obj_idx, yolo_obj in enumerate(yolo_obj_list):
@@ -179,15 +195,20 @@ class COCO2YOLO():
                         f.write(point_line)
                     f.write('\n')
                 else:
-                    yolo_obj_line = '%s %s %s %s %s\n' % yolo_obj \
-                        if yolo_obj_idx + 1 != len(yolo_obj_list) else \
-                        '%s %s %s %s %s' % yolo_obj
+                    yolo_line = str(yolo_obj[0])
+                    for itm in yolo_obj[1:]:
+                        yolo_line += ' '+str(itm)
+
+                    # yolo_obj_line = '%s %s %s %s %s\n' % yolo_obj \
+                    #     if yolo_obj_idx + 1 != len(yolo_obj_list) else \
+                    #     '%s %s %s %s %s' % yolo_obj
+                    yolo_obj_line = yolo_line+'\n' if yolo_obj_idx+1 != len(yolo_obj_list) else yolo_line
                     f.write(yolo_obj_line)
 
     def save_yolo_image(self, json_data, img_name, source_images_dir_path, dst_images_dir_path):
         sour_img_path = os.path.join(source_images_dir_path, img_name)
         dst_img_path = os.path.join(dst_images_dir_path, img_name)
-        if (json_data['imageData'] is not None) and not os.path.exists(dst_img_path):
+        if 'imageData' in json_data and json_data['imageData'] is not None and not os.path.exists(dst_img_path):
             img = utils.img_b64_to_arr(json_data['imageData'])
             PIL.Image.fromarray(img).save(dst_img_path)
         else:
@@ -195,7 +216,6 @@ class COCO2YOLO():
         return dst_img_path
 
 
-
 if __name__ == '__main__':
-    convertor = COCO2YOLO(source_dir='../exp_dataset/labelme_test',dst_dir='../exp_dataset/TDataset')
+    convertor = COCO2YOLO(source_dir='../exp_dataset/coco', dst_dir='../exp_dataset/yolo')
     convertor.convert()
