@@ -16,7 +16,7 @@ dota2coco
 dota2voc
 -[x] dota2yolo
 labelimg2coco
-labelimg2dota
+-[x] labelimg2dota
 labelimg2voc
 labelimg2yolo
 voc2coco

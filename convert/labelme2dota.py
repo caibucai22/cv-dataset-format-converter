@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 """
-@File    ：labelimg2dota.py
+@File    ：labelme2dota.py
 @Author  ：Csy
 @Date    ：2023-09-11 21:28
 @Bref    :
@@ -21,13 +21,13 @@ import utils
 from utils.Exception import *
 
 
-class Labelimg2DOTA():
+class Labelme2DOTA():
 
     def __init__(self, source_dir, dst_dir, ann_image_together=True):
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
-        self.source_dataset_type = 'labelimg'
+        self.source_dataset_type = 'labelme'
         self.dst_dataset_type = 'dota'
         self.diffculty = 0
         self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
@@ -56,8 +56,8 @@ class Labelimg2DOTA():
         # 是否创建文件夹
         # utils.make_dirs()
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelimg')
-        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelimg')
+        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
+        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
 
     def get_label_id_map(self, json_dir):
         label_set = set()

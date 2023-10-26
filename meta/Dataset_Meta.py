@@ -14,7 +14,7 @@ Dataset_setting = {
         'no_split_dirs':['images','annotations'],
         'dirs': ['train', 'val', 'test', 'annotations']
     },
-    'labelimg': {
+    'labelme': {
         'img_types': [],
         'anno_type': '.json',
         'dirs': ['images', 'labels']

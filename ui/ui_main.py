@@ -18,7 +18,7 @@ class Ui_Main_UserInput:
         VOC = 'VOC'
         COCO = 'COCO'
         YOLO = 'YOLO'
-        LABELIMG = 'labelimg'
+        LABELME = 'labelme'
 
     class Operation_Type(Enum):
         FILE = 1
@@ -264,14 +264,14 @@ class Ui_Main(object):
         self.src_format_comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"VOC", None))
         self.src_format_comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"COCO", None))
         self.src_format_comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"YOLO", None))
-        self.src_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Labelimg", None))
+        self.src_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Labelme", None))
 
         self.dst_format_label.setText(QCoreApplication.translate("MainWindow", u"\u76ee\u6807\u6837\u5f0f", None))
         self.dst_format_comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"DOTA", None))
         self.dst_format_comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"VOC", None))
         self.dst_format_comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"COCO", None))
         self.dst_format_comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"YOLO", None))
-        self.dst_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Labelimg", None))
+        self.dst_format_comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Labelme", None))
 
         self.divide_proportion_label.setText(
             QCoreApplication.translate("MainWindow", u"\u5212\u5206\u6bd4\u4f8b", None))
@@ -307,23 +307,23 @@ class Ui_Main(object):
                 (Ui_Main_UserInput.Dataset_Format.DOTA, Ui_Main_UserInput.Dataset_Format.VOC): dota2voc,
                 (Ui_Main_UserInput.Dataset_Format.DOTA, Ui_Main_UserInput.Dataset_Format.COCO): dota2coco,
                 (Ui_Main_UserInput.Dataset_Format.DOTA, Ui_Main_UserInput.Dataset_Format.YOLO): dota2yolo,
-                (Ui_Main_UserInput.Dataset_Format.DOTA, Ui_Main_UserInput.Dataset_Format.LABELIMG): dota2labelimg,
+                (Ui_Main_UserInput.Dataset_Format.DOTA, Ui_Main_UserInput.Dataset_Format.LABELME): dota2labelme,
                 (Ui_Main_UserInput.Dataset_Format.VOC, Ui_Main_UserInput.Dataset_Format.COCO): voc2coco,
-                (Ui_Main_UserInput.Dataset_Format.VOC, Ui_Main_UserInput.Dataset_Format.LABELIMG): voc2labelimg,
+                (Ui_Main_UserInput.Dataset_Format.VOC, Ui_Main_UserInput.Dataset_Format.LABELME): voc2labelme,
                 (Ui_Main_UserInput.Dataset_Format.VOC, Ui_Main_UserInput.Dataset_Format.YOLO): voc2yolo,
                 (Ui_Main_UserInput.Dataset_Format.VOC, Ui_Main_UserInput.Dataset_Format.DOTA): voc2dota,
                 (Ui_Main_UserInput.Dataset_Format.COCO, Ui_Main_UserInput.Dataset_Format.YOLO): coco2yolo,
-                (Ui_Main_UserInput.Dataset_Format.COCO, Ui_Main_UserInput.Dataset_Format.LABELIMG): coco2labelimg,
+                (Ui_Main_UserInput.Dataset_Format.COCO, Ui_Main_UserInput.Dataset_Format.LABELME): coco2labelme,
                 (Ui_Main_UserInput.Dataset_Format.COCO, Ui_Main_UserInput.Dataset_Format.VOC): coco2voc,
                 (Ui_Main_UserInput.Dataset_Format.COCO, Ui_Main_UserInput.Dataset_Format.DOTA): coco2dota,
                 (Ui_Main_UserInput.Dataset_Format.YOLO, Ui_Main_UserInput.Dataset_Format.VOC): yolo2voc,
-                (Ui_Main_UserInput.Dataset_Format.YOLO, Ui_Main_UserInput.Dataset_Format.LABELIMG): yolo2labelimg,
+                (Ui_Main_UserInput.Dataset_Format.YOLO, Ui_Main_UserInput.Dataset_Format.LABELME): yolo2labelme,
                 (Ui_Main_UserInput.Dataset_Format.YOLO, Ui_Main_UserInput.Dataset_Format.COCO): yolo2coco,
                 (Ui_Main_UserInput.Dataset_Format.YOLO, Ui_Main_UserInput.Dataset_Format.DOTA): yolo2dota,
-                (Ui_Main_UserInput.Dataset_Format.LABELIMG, Ui_Main_UserInput.Dataset_Format.VOC): labelimg2voc,
-                (Ui_Main_UserInput.Dataset_Format.LABELIMG, Ui_Main_UserInput.Dataset_Format.COCO): labelimg2coco,
-                (Ui_Main_UserInput.Dataset_Format.LABELIMG, Ui_Main_UserInput.Dataset_Format.YOLO): labelimg2yolo,
-                (Ui_Main_UserInput.Dataset_Format.LABELIMG, Ui_Main_UserInput.Dataset_Format.DOTA): labelimg2dota,
+                (Ui_Main_UserInput.Dataset_Format.LABELME, Ui_Main_UserInput.Dataset_Format.VOC): labelme2voc,
+                (Ui_Main_UserInput.Dataset_Format.LABELME, Ui_Main_UserInput.Dataset_Format.COCO): labelme2coco,
+                (Ui_Main_UserInput.Dataset_Format.LABELME, Ui_Main_UserInput.Dataset_Format.YOLO): labelme2yolo,
+                (Ui_Main_UserInput.Dataset_Format.LABELME, Ui_Main_UserInput.Dataset_Format.DOTA): labelme2dota,
             }
 
             func = format_funcs.get((user_input.src_format, user_input.dst_format))

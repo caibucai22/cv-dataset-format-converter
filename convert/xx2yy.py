@@ -97,5 +97,5 @@ class XX2YY():
         return class_name_to_id
 
 if __name__ == '__main__':
-    model = XX2YY(source_dir='../exp_dataset/labelimg', dst_dir='../exp_dataset/TDataset',
-                  source_dataset_type='labelimg', dst_datatset_type='coco')
+    model = XX2YY(source_dir='../exp_dataset/labelme', dst_dir='../exp_dataset/TDataset',
+                  source_dataset_type='labelme', dst_datatset_type='coco')

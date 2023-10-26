@@ -49,7 +49,7 @@ def get_imgs(source_dir, dataset_type):
         imgs = getImageListFromMulti(source_dir,dataset_type='coco')
     elif dataset_type == 'yolo':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
-    elif dataset_type == 'labelimg':
+    elif dataset_type == 'labelme':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
     elif dataset_type == 'dota':
         imgs = getImageListFromMulti(source_dir, dataset_type='dota')
@@ -67,8 +67,8 @@ def get_Anns(source_dir, dataset_type='coco'):
         anns = getAnnListFromMulti(source_dir,dataset_type='coco')
     elif dataset_type == 'yolo':
         anns = getAnnListFromMulti(source_dir, dataset_type='yolo')
-    elif dataset_type == 'labelimg':
-        anns = getAnnListFromMulti(source_dir, dataset_type='labelimg')
+    elif dataset_type == 'labelme':
+        anns = getAnnListFromMulti(source_dir, dataset_type='labelme')
     elif dataset_type == 'dota':
         anns = getAnnListFromMulti(source_dir, dataset_type='dota')
     elif dataset_type == 'voc':
@@ -82,7 +82,7 @@ def check_anno_file_exist(source_dir, type, exist_with_img=True):
     if type == 'coco':
         if os.path.exists(os.path.join(source_dir, 'annotations', 'annotation.json')):
             return True
-    elif type == 'labelimg':
+    elif type == 'labelme':
         if exist_with_img:
             pass
         else:
@@ -190,8 +190,8 @@ if __name__ == '__main__':
     # ann_list = getAnnListFromMulti('./exp_dataset/yolo',dataset_type='yolo')
     # print(ann_list)
 
-    # imgs_list, imgs_len = get_imgs(source_dir, dataset_type='labelimg')
-    # anns_list, anns_len = get_Anns(source_dir, dataset_type='labelimg')
+    # imgs_list, imgs_len = get_imgs(source_dir, dataset_type='labelme')
+    # anns_list, anns_len = get_Anns(source_dir, dataset_type='labelme')
     # print(imgs_list)
     # print(anns_list)
     # test
