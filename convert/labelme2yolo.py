@@ -22,7 +22,8 @@ import utils
 
 class Labelme2YOLO():
 
-    def __init__(self, source_dir, dst_dir,ann_image_together=True):
+    def __init__(self, source_dir, dst_dir,ann_image_together=True,
+                 source_labels_txt_path=None):
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
@@ -31,6 +32,7 @@ class Labelme2YOLO():
         self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
         [0])
         self.source_labels_dir_path = self.source_images_dir_path
+        self.source_labels_txt_path = source_labels_txt_path
         if not ann_image_together:
             self.source_labels_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs'][-1])
 
@@ -44,7 +46,10 @@ class Labelme2YOLO():
 
         # 根据用户是否提供
         # 1 遍历得到 2 用户提供
-        self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
+        # self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
+        if self.source_labels_txt_path is not None:
+            self.class_name_to_id, self.class_id_to_name = utils.get_label_id_map_with_txt(
+                self.source_labels_txt_path)
 
         # 打印 源文件夹下 目录情况
         print('src dir struct:')
@@ -53,8 +58,6 @@ class Labelme2YOLO():
         print("dst dir struct:")
         utils.print_dirs_info(dst_dir)
 
-        # 是否创建文件夹
-        # utils.make_dirs()
 
         self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
         self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
@@ -83,6 +86,7 @@ class Labelme2YOLO():
                                             self.source_images_dir_path, self.dst_images_dir_path)
             yolo_obj_list = self.get_yolo_object_list(json_data, img_path)
             self.save_yolo_label(json_name, self.dst_labels_dir_path, yolo_obj_list)
+        shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
 
     def convert_one(self, json_name):
         json_path = os.path.join(self.source_labels_dir_path, json_name)
@@ -126,7 +130,7 @@ class Labelme2YOLO():
         yolo_w = round(float(obj_w / img_w), 6)
         yolo_h = round(float(obj_h / img_h), 6)
 
-        label_id = self.label_id_map[shape['label']]
+        label_id = self.class_name_to_id[shape['label']]
 
         return label_id, yolo_center_x, yolo_center_y, yolo_w, yolo_h
 
@@ -146,7 +150,7 @@ class Labelme2YOLO():
         yolo_w = round(float(obj_w / img_w), 6)
         yolo_h = round(float(obj_h / img_h), 6)
 
-        label_id = self.label_id_map[shape['label']]
+        label_id = self.class_name_to_id[shape['label']]
 
         return label_id, yolo_center_x, yolo_center_y, yolo_w, yolo_h
 
@@ -159,7 +163,7 @@ class Labelme2YOLO():
             return x_lists, y_lists
 
         label_id_polygon_points = []
-        label_id = self.label_id_map[shape['label']]
+        label_id = self.class_name_to_id[shape['label']]
         label_id_polygon_points.append(label_id)
 
         x_lists, y_lists = get_points_list(shape['points'])

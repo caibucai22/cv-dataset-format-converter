@@ -50,6 +50,7 @@ class Labelme2COCO():
         print("dst dir struct:")
         # 判断 文件夹 与 Dataset_Setting 要求的是否一致
         utils.check_and_create_dir(self.dst_dataset_type, dst_dir)
+
         self.dst_images_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']
         [0])
         self.dst_labels_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']

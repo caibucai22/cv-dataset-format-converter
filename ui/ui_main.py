@@ -18,7 +18,7 @@ class Ui_Main_UserInput:
         VOC = 'VOC'
         COCO = 'COCO'
         YOLO = 'YOLO'
-        LABELME = 'labelme'
+        LABELME = 'Labelme'
 
     class Operation_Type(Enum):
         FILE = 1

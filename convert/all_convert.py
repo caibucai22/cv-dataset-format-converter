@@ -213,12 +213,13 @@ def labelme2dota(source_dir, dst_dir,
 
 
 def labelme2yolo(source_dir, dst_dir,
-                  source_dataset_type='labelme', dst_datatset_type='yolo',
-                  source_labels_txt_path=None,
-                  ann_image_together=False, test_size=0.1,
-                  val_size=0.11):
-    labelme2yolo = Labelme2YOLO(source_dir,dst_dir,ann_image_together=True)
-    pass
+                 source_dataset_type='labelme', dst_datatset_type='yolo',
+                 source_labels_txt_path=None,
+                 ann_image_together=False, test_size=0.1,
+                 val_size=0.11):
+    labelme2yolo = Labelme2YOLO(source_dir, dst_dir, ann_image_together=True,
+                                source_labels_txt_path=source_dir + '/' + 'classes.txt')
+    labelme2yolo.convert()
 
 
 def labelme2voc(source_dir, dst_dir,

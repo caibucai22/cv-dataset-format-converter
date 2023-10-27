@@ -15,7 +15,7 @@ Dataset_setting = {
         'dirs': ['train', 'val', 'test', 'annotations']
     },
     'labelme': {
-        'img_types': [],
+        'img_types': ['.jpg','.png','.bmp'],
         'anno_type': '.json',
         'dirs': ['images', 'labels']
     },
