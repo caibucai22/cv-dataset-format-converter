@@ -16,6 +16,7 @@ import uuid
 import numpy as np
 import cv2
 import imgviz
+from pycocotools import mask as pycoco_mask
 import pycocotools
 import PIL.Image
 from sklearn.model_selection import train_test_split
@@ -28,10 +29,14 @@ from meta import COCO_Meta
 # import label_file as labelfile
 from convert import label_file as labelfile
 
+
 class Labelme2COCO():
 
     # 0.9x = 0.1
-    def __init__(self, source_dir, dst_dir, source_labels_txt_path, ann_image_together=True, test_size=0.1,
+    def __init__(self, source_dir, dst_dir,
+                 source_dataset_type='labelme', dst_dataset_type='coco',
+                 source_labels_txt_path=None,
+                 ann_image_together=False, test_size=0.1,
                  val_size=0.11):
         self.source_dir = source_dir
         self.dst_dir = dst_dir
@@ -51,21 +56,24 @@ class Labelme2COCO():
         # 判断 文件夹 与 Dataset_Setting 要求的是否一致
         utils.check_and_create_dir(self.dst_dataset_type, dst_dir)
 
-        self.dst_images_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']
+        self.dst_images_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['no_split_dirs']
         [0])
-        self.dst_labels_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']
+        self.dst_labels_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['no_split_dirs']
         [-1])
-        if self.dst_dataset_type == 'coco':
-            # coco annotations test train val
-            dst_dirs = utils.print_dirs_info(dst_dir, display=False)
-            # test train val
-            self.dst_images_dir_path = [os.path.join(self.dst_dir, dir) for dir in dst_dirs if
-                                        dir not in ['annotations']]
+        # if self.dst_dataset_type == 'coco':
+        #     # coco annotations test train val
+        #     dst_dirs = utils.print_dirs_info(dst_dir, display=False)
+        #     # test train val
+        #     self.dst_images_dir_path = [os.path.join(self.dst_dir, dir) for dir in dst_dirs if
+        #                                 dir not in ['annotations']]
 
         # 根据用户是否提供
         # 1 遍历得到 2 用户提供
-        self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
-        self.class_name_to_id = self.get_label_id_map_with_txt(self.source_labels_txt_path)
+        # self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
+        # self.class_name_to_id = self.get_label_id_map_with_txt(self.source_labels_txt_path)
+        if self.source_labels_txt_path is not None:
+            self.class_name_to_id, self.class_id_to_name = utils.get_label_id_map_with_txt(
+                self.source_labels_txt_path)
 
         # 打印 源文件夹下 目录情况
         print('src dir struct:')
@@ -133,109 +141,112 @@ class Labelme2COCO():
 
     def convert(self):
 
-        for i, subdir in enumerate(self.dst_images_dir_path):
-            # test train val
-            out_ann_file = os.path.join(self.dst_labels_dir_path, str(subdir) + ".json")
-            image_id = 0
-            for img_name, json_name in zip(self.dst_subdir_image_list[i], self.dst_subdir_label_list[i]):
-                # 处理图片
-                out_img_path = os.path.join(self.dst_images_dir_path[i], img_name)
-                # 获取图像属性
-                label_file = labelfile.LabelFile(filename=json_name)
-                img = utils.img_data_to_arr(label_file.imageData)
-                imgviz.io.imsave(out_img_path, img)
+        out_ann_file = os.path.join(self.dst_labels_dir_path,  "annotations.json")
+        image_id = 0
+        for img_name, json_name in zip(self.imgs_list, self.anns_list):
+            # 处理图片
+            out_img_path = os.path.join(self.dst_images_dir_path, img_name)
+            # 获取图像属性
+            label_file = labelfile.LabelFile(filename=self.source_labels_dir_path+'/'+json_name)
+            img = utils.img_data_to_arr(label_file.imageData)
+            imgviz.io.imsave(out_img_path, img)
 
-                # json
-                self.dst_template["images"].append(
+            # json
+            self.dst_template["images"].append(
+                dict(
+                    license=0,
+                    url=None,
+                    # file_name=os.path.relpath(out_img_path, os.path.dirname(out_ann_file)),
+                    file_name=img_name,
+                    height=img.shape[0],
+                    width=img.shape[1],
+                    date_captured=None,
+                    id=image_id,
+                )
+            )
+            image_id += 1
+
+            # for area
+            masks = {}
+            segmentations = collections.defaultdict(list)
+            for shape in label_file.shapes:
+                points = shape["points"]
+                label = shape["label"]
+                group_id = shape.get("group_id")
+                shape_type = shape.get("shape_type", "polygon")
+                mask = utils.shape_to_mask(img.shape[:2], points, shape_type)
+
+                if group_id is None:
+                    group_id = uuid.uuid1()
+                instance = (label, group_id)
+
+                if instance in masks:
+                    masks[instance] = mask[instance] | mask
+                else:
+                    masks[instance] = mask
+
+                if shape_type == "rectangle":
+                    (x1, y1), (x2, y2) = points
+                    x1, x2 = sorted([x1, x2])
+                    y1, y2 = sorted([y1, y2])
+                    points = [x1, y1, x2, y1, x2, y2, x1, y2]
+                if shape_type == 'circle':
+                    (x1, y1), (x2, y2) = points
+                    r = np.linalg.norm([x2 - x1, y2 - y1])
+                    n_points_circle = max(int(np.pi / np.arcos(1 - 1 / r)), 12)
+                    i = np.arange(n_points_circle)
+                    x = x1 + r * np.sin(2 * np.pi / n_points_circle * i)
+                    y = y1 + r * np.cos(2 * np.pi / n_points_circle * i)
+                    points = np.stack((x, y), axis=1).flatten().tolist()
+                else:
+                    points = np.asarray(points).flatten().tolist()
+
+                segmentations[instance].append(points)
+            segmentations = dict(segmentations)
+            for instance, mask in masks.items():
+                cls_name, group_id = instance
+                if cls_name not in self.class_name_to_id:
+                    continue
+                cls_id = self.class_name_to_id[cls_name]
+
+                mask = np.asfortranarray(mask.astype(np.uint8))
+                mask = pycoco_mask.encode(mask)
+                area = float(pycoco_mask.area(mask))
+                bbox = pycoco_mask.toBbox(mask).flatten().tolist()
+
+                self.dst_template['annotations'].append(
                     dict(
-                        license=0,
-                        url=None,
-                        file_name=os.path.relpath(out_img_path, os.path.dirname(out_ann_file)),
-                        height=img.shape[0],
-                        width=img.shape[1],
-                        date_captured=None,
-                        id=image_id,
+                        id=len(self.dst_template["annotations"]),
+                        image_id=image_id,
+                        category_id=cls_id,
+                        segmentation=segmentations[instance],
+                        area=area,
+                        bbox=bbox,
+                        iscrowd=0,
                     )
                 )
-                image_id += 1
+        with open(out_ann_file,'w') as f:
+            json.dump(self.dst_template,f,indent=2)
+        shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
+        print('done!')
 
-                # for area
-                masks = {}
-                segmentations = collections.defaultdict(list)
-                for shape in label_file.shapes:
-                    points = shape["points"]
-                    label = shape["label"]
-                    group_id = shape.get("group_id")
-                    shape_type = shape.get("shape_type", "polygon")
-                    mask = utils.shape_to_mask(img.shape[:2], points, shape_type)
-
-                    if group_id is None:
-                        group_id = uuid.uuid1()
-                    instance = (label, group_id)
-
-                    if instance in masks:
-                        masks[instance] = mask[instance] | mask
-                    else:
-                        masks[instance] = mask
-
-                    if shape_type == "rectangle":
-                        (x1, y1), (x2, y2) = points
-                        x1, x2 = sorted([x1, x2])
-                        y1, y2 = sorted([y1, y2])
-                        points = [x1, y1, x2, y1, x2, y2, x1, y2]
-                    if shape_type == 'circle':
-                        (x1, y1), (x2, y2) = points
-                        r = np.linalg.norm([x2 - x1, y2 - y1])
-                        n_points_circle = max(int(np.pi / np.arcos(1 - 1 / r)), 12)
-                        i = np.arange(n_points_circle)
-                        x = x1 + r * np.sin(2 * np.pi / n_points_circle * i)
-                        y = y1 + r * np.cos(2 * np.pi / n_points_circle * i)
-                        points = np.stack((x, y), axis=1).flatten().tolist()
-                    else:
-                        points = np.asarray(points).flatten().tolist()
-
-                    segmentations[instance].append(points)
-                segmentations = dict(segmentations)
-                for instance,mask in masks.items():
-                    cls_name,group_id = instance
-                    if cls_name not in self.class_name_to_id:
-                         continue
-                    cls_id = self.class_name_to_id[cls_name]
-
-                    mask = np.asfortranarray(mask.astype(np.uint8))
-                    mask = pycocotools.mask.encode(mask)
-                    area = float(pycocotools.mask.area(mask))
-                    bbox = pycocotools.mask.toBbox(mask).flatten().tolist()
-
-                    self.dst_template['annotations'].append(
-                        dict(
-                            id = len(self.dst_template["annotations"]),
-                            image_id = image_id,
-                            category_id = cls_id,
-                            segmentation = segmentations[instance],
-                            area = area,
-                            bbox = bbox,
-                            iscrowd=0,
-                        )
-                    )
-
-        # for img_name, json_name in zip(self.imgs_list, self.anns_list):
-        #     json_path = os.path.join(self.source_labels_dir_path, json_name)
-        #     json_data = json.load(open(json_path))
-        #
-        #     img_path = self.save_dota_image(json_data, img_name,
-        #                                     self.source_images_dir_path, self.dst_images_dir_path)
-        #     dota_obj_list = self.get_dota_object_list(json_data, img_path)
-        #     self.save_dota_label(json_name, self.dst_labels_dir_path, dota_obj_list)
+    # for img_name, json_name in zip(self.imgs_list, self.anns_list):
+    #     json_path = os.path.join(self.source_labels_dir_path, json_name)
+    #     json_data = json.load(open(json_path))
+    #
+    #     img_path = self.save_dota_image(json_data, img_name,
+    #                                     self.source_images_dir_path, self.dst_images_dir_path)
+    #     dota_obj_list = self.get_dota_object_list(json_data, img_path)
+    #     self.save_dota_label(json_name, self.dst_labels_dir_path, dota_obj_list)
 
     def convert_one(self, json_name):
         json_path = os.path.join(self.source_labels_dir_path, json_name)
         json_data = json.load(open(json_path))
 
-        img_path = self.save_dota_image(json_data, json_name,
+        img_path = self.save_coco_image(json_data, json_name,
                                         self.source_images_dir_path, self.dst_images_dir_path)
         dota_obj_list = self.get_dota_object_list(json_data, img_path)
-        self.save_dota_label(json_name, self.dst_labels_dir_path, dota_obj_list)
+        self.save_coco_label(json_name, self.dst_labels_dir_path, dota_obj_list)
 
     def get_dota_object_list(self, json_data, img_path):
         dota_obj_list = []
@@ -265,7 +276,7 @@ class Labelme2COCO():
             dota_obj_list.append(dota_obj)
         return dota_obj_list
 
-    def save_dota_label(self, json_name, label_dir_path, dota_obj_list):
+    def save_coco_label(self, json_name, label_dir_path, dota_obj_list):
         txt_path = os.path.join(label_dir_path, json_name.replace('.json', '.txt'))
 
     def save_coco_image(self, json_data, img_name, source_images_dir_path, dst_images_dir_path):
@@ -281,5 +292,7 @@ class Labelme2COCO():
 
 if __name__ == '__main__':
     convertor = Labelme2COCO(source_dir='../exp_dataset/labelme2', dst_dir='../exp_dataset/TDataset',
+                             source_labels_txt_path='../exp_dataset/labelme2/classes.txt',
                              ann_image_together=False)
-    convertor.generate_template(COCO_Meta)
+    # convertor.generate_template(COCO_Meta)
+    convertor.convert()

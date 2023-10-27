@@ -195,7 +195,7 @@ def yolo2voc(source_dir, dst_dir,
 
 
 def yolo2coco(source_dir, dst_dir,
-              source_dataset_type='yolo', dst_datatset_type='coco',
+              source_dataset_type='yolo', dst_dataset_type='coco',
               source_labels_txt_path=None,
               ann_image_together=False, test_size=0.1,
               val_size=0.11):
@@ -235,12 +235,12 @@ def labelme2voc(source_dir, dst_dir,
 
 
 def labelme2coco(source_dir, dst_dir,
-                 source_dataset_type, dst_datatset_type,
+                 source_dataset_type='labelme', dst_dataset_type='coco',
                  source_labels_txt_path=None,
                  ann_image_together=False, test_size=0.1,
                  val_size=0.11
                  ):
-    labelimg2coco = Labelme2COCO(source_dir, dst_dir,
-                                 source_dataset_type='labelme', dst_datatset_type='coco',
-                                 source_labels_txt_path=source_dir)
-    labelimg2coco.convert()
+    labelme2coco = Labelme2COCO(source_dir, dst_dir,
+                                 source_dataset_type='labelme', dst_dataset_type='coco',
+                                 source_labels_txt_path=source_dir+'/classes.txt')
+    labelme2coco.convert()
