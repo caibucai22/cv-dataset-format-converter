@@ -11,7 +11,7 @@ label-form-conversion-tool
 ## 转换流
 
 ```mermaid
-graph TB
+graph RL
     A[labelimg]
     B[labelme]
     C[COCO]
@@ -20,9 +20,9 @@ graph TB
     F[DOTA]
     A -.->D
     A -.->E
-    B --> C
-    B --> D
-    B --> F
+    B -->|实例分割| C
+    B -->|实例分割| D
+    C -->|实例分割| D
     C --> D
     D --> C
     D --> E

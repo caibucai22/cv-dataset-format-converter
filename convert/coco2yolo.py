@@ -40,6 +40,9 @@ class COCO2YOLO():
             self.source_labels_dir_path = os.path.join(source_dir,
                                                        Dataset_setting[self.source_dataset_type]['no_split_dirs'][-1])
 
+        print("dst dir struct:")
+        # 判断 文件夹 与 Dataset_Setting 要求的是否一致
+        utils.check_and_create_dir(self.dst_dataset_type, dst_dir)
         self.dst_images_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']
         [0])
         self.dst_labels_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']
@@ -104,6 +107,8 @@ class COCO2YOLO():
                                             self.source_images_dir_path, self.dst_images_dir_path)
             yolo_obj_list = self.get_yolo_object_list(img_ann, img_path)
             self.save_yolo_label(img_name, self.dst_labels_dir_path, yolo_obj_list)
+
+        shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
 
     def convert_one(self, json_name):
         json_path = os.path.join(self.source_labels_dir_path, json_name)

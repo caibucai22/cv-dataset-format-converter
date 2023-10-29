@@ -130,7 +130,7 @@ def voc2yolo(source_dir, dst_dir,
 
 
 def coco2dota(source_dir, dst_dir,
-              source_dataset_type, dst_datatset_type,
+              source_dataset_type='coco', dst_dataset_type='dota',
               source_labels_txt_path=None,
               ann_image_together=False, test_size=0.1,
               val_size=0.11):
@@ -139,15 +139,16 @@ def coco2dota(source_dir, dst_dir,
     :return:
     '''
     coco2yolo = COCO2YOLO(source_dir, TDATASET_PATH,
-                          source_dataset_type='coco', dst_datatset_type='yolo',
-                          source_labels_txt_path=source_dir)
+                          source_dataset_type='coco', dst_dataset_type='yolo',
+                          source_labels_txt_path=source_dir+'/classes.txt')
 
     yolo2dota = YOLO2DOTA(TDATASET_PATH, dst_dir,
                           source_dataset_type='yolo', dst_datatset_type='dota',
-                          source_labels_txt_path=source_dir
-                          )
+                          source_labels_txt_path=TDATASET_PATH+'/classes.txt')
 
+    print('coco2yolo')
     coco2yolo.convert()
+    print('yolo2dota')
     yolo2dota.convert()
 
 
@@ -205,11 +206,12 @@ def yolo2coco(source_dir, dst_dir,
 
 
 def labelme2dota(source_dir, dst_dir,
-                 source_dataset_type, dst_datatset_type,
+                 source_dataset_type='labelme', dst_dataset_type='dota',
                  source_labels_txt_path=None,
                  ann_image_together=False, test_size=0.1,
                  val_size=0.11):
-    Labelme2DOTA(source_dir, dst_dir, ann_image_together).convert()
+    labelme2dota = Labelme2DOTA(source_dir, dst_dir, ann_image_together)
+    labelme2dota.convert()
 
 
 def labelme2yolo(source_dir, dst_dir,
@@ -223,15 +225,12 @@ def labelme2yolo(source_dir, dst_dir,
 
 
 def labelme2voc(source_dir, dst_dir,
-                source_dataset_type, dst_datatset_type,
+                source_dataset_type='labelme', dst_dataset_type='voc',
                 source_labels_txt_path=None,
                 ann_image_together=False, test_size=0.1,
                 val_size=0.11):
-    labelimg2yolo = Labelme2YOLO(source_dir, dst_dir,
-                                 source_dataset_type='labelme', dst_datatset_type='coco',
-                                 source_labels_txt_path=source_dir)
-
-    labelme2coco.convert()
+    print('不支持从labelme转换voc')
+    pass
 
 
 def labelme2coco(source_dir, dst_dir,
@@ -241,6 +240,6 @@ def labelme2coco(source_dir, dst_dir,
                  val_size=0.11
                  ):
     labelme2coco = Labelme2COCO(source_dir, dst_dir,
-                                 source_dataset_type='labelme', dst_dataset_type='coco',
-                                 source_labels_txt_path=source_dir+'/classes.txt')
+                                source_dataset_type='labelme', dst_dataset_type='coco',
+                                source_labels_txt_path=source_dir + '/classes.txt')
     labelme2coco.convert()

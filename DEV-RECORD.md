@@ -7,26 +7,32 @@
 2023.10.22 目前转换部分代码已全部完成,进入和界面的联调测试阶段
 
 ### 2023.10.22 test
-coco2dota
--[] coco2labelimg
-coco2voc
+目标检测
+-[] coco2dota
+-[] coco2voc
 -[x] coco2yolo
-dota2coco
--[] dota2labelimg
-dota2voc
+-[] dota2coco
+-[] dota2voc
 -[x] dota2yolo
-labelimg2coco
--[] labelimg2dota
-labelimg2voc
--[x]labelimg2yolo
-voc2coco
-voc2dota
--[] voc2labelimg
-voc2yolo
+-[x] labelme2dota
+-[] voc2coco
+-[] voc2dota
+-[] voc2yolo
 -[x] yolo2coco
 -[x] yolo2dota
--[] yolo2labelimg
 -[x] yolo2voc
+实例分割
+-[x] labelme2yolo
+-[x]labelme2coco
+
+未支持
+- **unsupported** coco2labelimg
+- **unsupported** dota2labelimg
+- **unsupported** labelme2voc
+- **unsupported** labelme2dota
+- **unsupported** voc2labelimg
+- **unsupported** yolo2labelimg
+
 
 ## 支持数据源
 1. 来自 labelimg 

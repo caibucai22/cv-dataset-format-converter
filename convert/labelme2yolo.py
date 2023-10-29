@@ -22,7 +22,9 @@ import utils
 
 class Labelme2YOLO():
 
-    def __init__(self, source_dir, dst_dir,ann_image_together=True,
+    def __init__(self, source_dir, dst_dir,
+                 source_dataset_type='labelme', dst_dataset_type='coco',
+                 ann_image_together=True,
                  source_labels_txt_path=None):
         self.source_dir = source_dir
         self.dst_dir = dst_dir
