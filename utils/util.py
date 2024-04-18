@@ -29,6 +29,7 @@ def check_and_create_dir(dst_dataset_type, dst_dir):
         dst_dirs = Dataset_setting[dst_dataset_type]['no_split_dirs']
     else:
         dst_dirs = Dataset_setting[dst_dataset_type]['dirs']
+
     if len(dst_dirs) != len(cur_dirs) or dst_dirs != cur_dirs:
         # 移除已有文件夹
         # a,b = len(dst_dirs),len(cur_dirs)
@@ -41,6 +42,8 @@ def check_and_create_dir(dst_dataset_type, dst_dir):
         # 创建目标数据集格式文件夹
         for dir in dst_dirs:
             os.makedirs(os.path.join(dst_dir, dir))
+    else:
+        print('dst_dir is same,no create dir')
 
 
 def get_imgs(source_dir, dataset_type):

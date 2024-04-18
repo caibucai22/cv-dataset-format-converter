@@ -5,9 +5,12 @@
 @Date    ：2023-10-17 18:58 
 @Bref    :
 @Ref     :
+TODO 实现基于源数据来制造数据集，包括数据集划分 ，现有版本不支持，只支持从数据转为COCO格式 转换完成是一个整体的数据集
 """
 import os, shutil
 import json
+from datetime import date, datetime
+
 import cv2
 from meta.Dataset_Meta import Dataset_setting
 import utils
@@ -19,6 +22,7 @@ class YOLO2COCO():
                  source_dataset_type='yolo', dst_datatset_type='coco',
                  source_labels_txt_path=None,
                  ann_image_together=False):
+        self.today = datetime.today().strftime('%Y-%m-%d')
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
@@ -80,7 +84,7 @@ class YOLO2COCO():
             img_context['file_name'] = img_name
             img_context['height'] = img_h
             img_context['width'] = img_w
-            img_context['date_captured'] = '2021-07-25'
+            img_context['date_captured'] = self.today
             img_context['id'] = i  # 该图片的id
             img_context['license'] = 1
             img_context['color_url'] = ''
@@ -121,6 +125,8 @@ class YOLO2COCO():
 
 
 if __name__ == '__main__':
-    convertor = YOLO2COCO(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/TDataset',
-                          source_labels_txt_path='../exp_dataset/yolo/labels/classes.txt')
+    # convertor = YOLO2COCO(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/TDataset',
+    #                       source_labels_txt_path='../exp_dataset/yolo/labels/classes.txt')
+    convertor = YOLO2COCO(source_dir=r'E:\datasets\new_ScratchDataset3', dst_dir=r'E:\datasets\Scratch3CoCo',
+                          source_labels_txt_path=r'E:\datasets\new_ScratchDataset3\classes.txt')
     convertor.convert()

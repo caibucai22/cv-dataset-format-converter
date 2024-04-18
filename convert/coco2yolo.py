@@ -109,6 +109,7 @@ class COCO2YOLO():
             self.save_yolo_label(img_name, self.dst_labels_dir_path, yolo_obj_list)
 
         shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
+        print('done!')
 
     def convert_one(self, json_name):
         json_path = os.path.join(self.source_labels_dir_path, json_name)
