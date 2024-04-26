@@ -43,6 +43,9 @@ class Labelme2COCO():
 
         self.source_dataset_type = 'labelme'
         self.dst_dataset_type = 'coco'
+
+        self.dst_template = self.generate_template(COCO_Meta)
+
         self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
         [0])
         self.source_labels_dir_path = self.source_images_dir_path
@@ -71,8 +74,10 @@ class Labelme2COCO():
         # 1 遍历得到 2 用户提供
         # self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
         # self.class_name_to_id = self.get_label_id_map_with_txt(self.source_labels_txt_path)
-        if self.source_labels_txt_path is not None:
-            self.class_name_to_id, self.class_id_to_name = utils.get_label_id_map_with_txt(
+
+        # for coco use local get_label_id_map_with_txt() func
+        if self.source_labels_txt_path is not None and self.dst_dataset_type == 'coco':
+            self.class_name_to_id = self.get_label_id_map_with_txt(
                 self.source_labels_txt_path)
 
         # 打印 源文件夹下 目录情况
@@ -81,7 +86,6 @@ class Labelme2COCO():
 
         self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
         self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
-        self.dst_template = self.generate_template(COCO_Meta)
 
         # 划分数据集
         train_img, test_img, train_label, test_label = train_test_split(self.imgs_list, self.anns_list,
@@ -127,27 +131,30 @@ class Labelme2COCO():
     def generate_template(self, Dataset_Meta):
         template = Dataset_Meta.meta_key
         for key, value in Dataset_Meta.meta_key.items():
+            if key == 'type':
+                continue
             if key == 'info':
                 template[key] = Dataset_Meta.info_key
             elif key == 'licenses':
                 template[key].append(Dataset_Meta.license_key)
-            elif key == 'categories':
+            elif key in ['categories', 'images', 'annotations']:
                 # template[key].append(Dataset_Meta.category_key)
-                pass
+                template[key] = []
             else:
-                pass
+                raise Exception(f"not key {key} in coco meta info")
         template["type"] = 'instances'
         return template
 
     def convert(self):
 
-        out_ann_file = os.path.join(self.dst_labels_dir_path,  "annotations.json")
+        out_ann_file = os.path.join(self.dst_labels_dir_path, "annotations.json")
         image_id = 0
+        # fix no categories
         for img_name, json_name in zip(self.imgs_list, self.anns_list):
             # 处理图片
             out_img_path = os.path.join(self.dst_images_dir_path, img_name)
             # 获取图像属性
-            label_file = labelfile.LabelFile(filename=self.source_labels_dir_path+'/'+json_name)
+            label_file = labelfile.LabelFile(filename=self.source_labels_dir_path + '/' + json_name)
             img = utils.img_data_to_arr(label_file.imageData)
             imgviz.io.imsave(out_img_path, img)
 
@@ -181,7 +188,7 @@ class Labelme2COCO():
                 instance = (label, group_id)
 
                 if instance in masks:
-                    masks[instance] = mask[instance] | mask
+                    masks[instance] = masks[instance] | mask  # fix error
                 else:
                     masks[instance] = mask
 
@@ -225,10 +232,15 @@ class Labelme2COCO():
                         iscrowd=0,
                     )
                 )
-        with open(out_ann_file,'w') as f:
-            json.dump(self.dst_template,f,indent=2)
-        shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
-        print('done!')
+        with open(out_ann_file, 'w') as f:
+            json.dump(self.dst_template, f, indent=2)
+        # fix
+        if self.source_labels_txt_path is None:
+            shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
+        else:
+            shutil.copy(self.source_labels_txt_path, self.dst_dir + "/" + 'classes.txt')
+
+        # print('done!')
 
     # for img_name, json_name in zip(self.imgs_list, self.anns_list):
     #     json_path = os.path.join(self.source_labels_dir_path, json_name)
@@ -291,8 +303,9 @@ class Labelme2COCO():
 
 
 if __name__ == '__main__':
-    convertor = Labelme2COCO(source_dir='../exp_dataset/labelme2', dst_dir='../exp_dataset/TDataset',
-                             source_labels_txt_path='../exp_dataset/labelme2/classes.txt',
-                             ann_image_together=False)
+    convertor = Labelme2COCO(source_dir=r'D:\labelme-main\examples\instance_segmentation\data_annotated',
+                             dst_dir=r'D:\labelme-main\examples\instance_segmentation\test_my',
+                             source_labels_txt_path=r'D:\labelme-main\examples\instance_segmentation\labels.txt',
+                             ann_image_together=True)
     # convertor.generate_template(COCO_Meta)
     convertor.convert()

@@ -6,6 +6,7 @@
 @Bref    :
 @Ref     :
 TODO 实现基于源数据来制造数据集，包括数据集划分 ，现有版本不支持，只支持从数据转为COCO格式 转换完成是一个整体的数据集
+TODO 实现方式 1 增加一个专门划分 dataset 的类 来执行
 """
 import os, shutil
 import json
@@ -49,7 +50,7 @@ class YOLO2COCO():
         # 1 遍历得到 2 用户提供
         if self.source_labels_txt_path is not None:
             self.class_name_to_id, self.class_id_to_name = utils.get_label_id_map_with_txt(
-                self.source_labels_txt_path)
+                self.source_labels_txt_path,'coco')
 
         # 打印 源文件夹下 目录情况
         print('src dir struct:')
@@ -61,14 +62,15 @@ class YOLO2COCO():
         if self.anns_list[0] == 'classes.txt':
             self.anns_list = self.anns_list[1:]
 
-    def convert(self):
+    def convert(self,only_json=False):
         categories = []  # 存储类别的列表
+        # for coco has +1
         for id, label in self.class_id_to_name.items():
-            categories.append({'id': id + 1, 'name': label, 'supercategory': 'None'})
+            categories.append({'id': id, 'name': label, 'supercategory': 'None'})
 
         write_json_context = dict()  # 写入.json文件的大字典
-        write_json_context['info'] = {'description': '', 'url': '', 'version': '', 'year': 2021, 'contributor': '',
-                                      'date_created': '2021-07-25'}
+        write_json_context['info'] = {'description': '', 'url': '', 'version': '', 'year': self.today[:4], 'contributor': '',
+                                      'date_created': self.today}
         write_json_context['licenses'] = [{'id': 1, 'name': None, 'url': None}]
         write_json_context['categories'] = categories
         write_json_context['images'] = []
@@ -108,7 +110,7 @@ class YOLO2COCO():
 
                     bbox_dict['id'] = i * 10000 + j  # bounding box的坐标信息
                     bbox_dict['image_id'] = i
-                    bbox_dict['category_id'] = class_id + 1  # plus 1
+                    bbox_dict['category_id'] = self.class_name_to_id[self.class_id_to_name[class_id+1]] #plus 1 # class_id:yolo start 0 class_id_to_name:{0:bac,1:c1,2:c2}
                     bbox_dict['iscrowd'] = 0
                     # height, width = abs(ymax - ymin), abs(xmax - xmin)
                     bbox_dict['area'] = w * h
@@ -117,16 +119,24 @@ class YOLO2COCO():
 
                     write_json_context['annotations'].append(bbox_dict)
                 yolo_file.close()
-            shutil.copy(self.source_images_dir_path + "/" + img_name, self.dst_images_dir_path + "/" + img_name)
+            if not only_json:
+                shutil.copy(self.source_images_dir_path + "/" + img_name, self.dst_images_dir_path + "/" + img_name)
 
-        shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
         with open(self.dst_labels_dir_path + '/' + "annotations" + '.json', 'w') as anno_file:
             json.dump(write_json_context, anno_file, indent=2)
+
+        if self.source_labels_txt_path is None:
+            shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
+        else:
+            shutil.copy(self.source_labels_txt_path, self.dst_dir + "/" + 'classes.txt')
+
+
 
 
 if __name__ == '__main__':
     # convertor = YOLO2COCO(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/TDataset',
     #                       source_labels_txt_path='../exp_dataset/yolo/labels/classes.txt')
-    convertor = YOLO2COCO(source_dir=r'E:\datasets\new_ScratchDataset3', dst_dir=r'E:\datasets\Scratch3CoCo',
+
+    convertor = YOLO2COCO(source_dir=r'E:\datasets\new_ScratchDataset3\Dataset\train_sub', dst_dir=r'E:\datasets\Scratch3CoCo\train',
                           source_labels_txt_path=r'E:\datasets\new_ScratchDataset3\classes.txt')
-    convertor.convert()
+    convertor.convert(only_json=True)
