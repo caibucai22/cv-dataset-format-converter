@@ -13,5 +13,6 @@ class BaseConverter(object):
 
     def __init__(self,source_dir,dst_dir,
                  source_dataset_type,dst_dataset_type,
-                 source_labels_txt_path):
+                 source_labels_txt_path,
+                 ann_img_together=False):
         self.source_dir = source_dir
