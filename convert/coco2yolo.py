@@ -1,14 +1,5 @@
 # -*- coding: UTF-8 -*-
 """
-@File    ：coco2yolo.py
-@Author  ：Csy
-@Date    ：2023-09-12 14:40 
-@Bref    :
-@Ref     :
-"""
-
-# -*- coding: UTF-8 -*-
-"""
 @File    ：labelimg2yolo.py
 @Author  ：Csy
 @Date    ：2023-09-07 21:28 
