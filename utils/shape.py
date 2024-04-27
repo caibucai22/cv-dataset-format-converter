@@ -41,6 +41,7 @@ def bbox_dota2yolo(points, img_w, img_h):
 
 
 def bbox_voc2yolo(size, box):
+    # xmin, xmax, ymin, ymax = box
     dw = 1. / size[0]
     dh = 1. / size[1]
     x = (box[0] + box[1]) / 2.0
@@ -61,6 +62,20 @@ def bbox_yolo2voc(x, y, w, h, img_w, img_h):
     xmax = int(x + w / 2)
     ymax = int(y + h / 2)
     return xmin, ymin, xmax, ymax
+
+
+def bbox_yolo2coco(x, y, w, h, img_w, img_h):
+    x, y, w, h = x * img_w, y * img_h, w * img_w, h * img_h
+    xmin = int(x - w / 2)
+    ymin = int(y - h / 2)
+    return xmin, ymin, w, h
+
+
+def bbox_coco2yolo(xmin, ymin, w, h, img_w, img_h):
+    w, h = w / img_w, h / img_h
+    xc = xmin / img_w + w / 2
+    yc = ymin / img_h + h / 2
+    return xc, yc, w, h
 
 
 def yolo_point_normalize(point_x, point_y, img_w, img_h):

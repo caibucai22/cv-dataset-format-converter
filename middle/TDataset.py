@@ -3,7 +3,7 @@
 # @file name : TDataset.py
 # @author    : Csy
 # @date      : 2023-07-24 21:25
-# @brief     : 构建中间转换数据集
+# @brief     : 构建中间转换数据集 TODO 通过一个收集器 将图片和标注收集到这里 构建中间转换数据集 和 划分器 协作 划分为 train test val 然后再调用转换器
 """
 import os
 
@@ -41,7 +41,7 @@ class TDataset():
             pass
         elif type == 'cityscape':
             pass
-        elif type == 'labelimg' or type == 'labelimg':
+        elif type == 'labelme' or type == 'labelme':
             pass
         else:
             raise Exception("unsupported dataset type")

@@ -1,8 +1,38 @@
 思路
 从用户提供的数据集中 提取信息 得到一个中间格式
 然后由中间格式 再转换为目标格式
+
 ## 进度
 2023.09.11 已实现 labelme2yolo, labelme2dota
+2023.10.22 目前转换部分代码已全部完成,进入和界面的联调测试阶段
+
+### 2023.10.22 test
+目标检测
+-[] coco2dota
+-[] coco2voc
+-[x] coco2yolo
+-[] dota2coco
+-[] dota2voc
+-[x] dota2yolo
+-[x] labelme2dota
+-[] voc2coco
+-[] voc2dota
+-[] voc2yolo
+-[x] yolo2coco
+-[x] yolo2dota
+-[x] yolo2voc
+实例分割
+-[x] labelme2yolo
+-[x]labelme2coco
+
+未支持
+- **unsupported** coco2labelimg
+- **unsupported** dota2labelimg
+- **unsupported** labelme2voc
+- **unsupported** labelme2dota
+- **unsupported** voc2labelimg
+- **unsupported** yolo2labelimg
+
 
 ## 支持数据源
 1. 来自 labelimg 
@@ -60,8 +90,10 @@ voc
 
 
 ## 待实现功能
+部分 数据集转换功能 只是整体转换，未划分数据集
+发生错误 清理保存的文件夹
 做 图像预处理增强 集成 包括 图像切片 ...
 
-UI
-1. 添加 ann_img_together 按钮
-2. 数据处理完成，自动打开保存文件夹窗口
+## UI
+-[x] 添加 ann_img_together 按钮 
+-[x] 数据处理完成，自动打开保存文件夹窗口

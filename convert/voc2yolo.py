@@ -65,7 +65,7 @@ class VOC2YOLO():
                 tree = ET.parse(f)
                 root = tree.getroot()
                 size_obj = root.find('size')
-                w, h = int(size_obj.find('width').text), int(size_obj.find('height').text)
+                img_w, img_h = int(size_obj.find('width').text), int(size_obj.find('height').text)
 
                 for obj in root.iter('object'):
                     difficult = obj.find('difficult').text
@@ -78,7 +78,7 @@ class VOC2YOLO():
                         float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text),
                         float(xmlbox.find('ymin').text),
                         float(xmlbox.find('ymax').text))
-                    xc, yc, w, h = utils.bbox_voc2yolo((w, h), b)
+                    xc, yc, w, h = utils.bbox_voc2yolo((img_w, img_h), b)
                     yolo_line = ''
                     for itm in [cls_id, xc, yc, w, h]:
                         yolo_line += ' ' + str(round(itm,7))

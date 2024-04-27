@@ -29,6 +29,7 @@ def check_and_create_dir(dst_dataset_type, dst_dir):
         dst_dirs = Dataset_setting[dst_dataset_type]['no_split_dirs']
     else:
         dst_dirs = Dataset_setting[dst_dataset_type]['dirs']
+
     if len(dst_dirs) != len(cur_dirs) or dst_dirs != cur_dirs:
         # 移除已有文件夹
         # a,b = len(dst_dirs),len(cur_dirs)
@@ -41,15 +42,17 @@ def check_and_create_dir(dst_dataset_type, dst_dir):
         # 创建目标数据集格式文件夹
         for dir in dst_dirs:
             os.makedirs(os.path.join(dst_dir, dir))
+    else:
+        print('dst_dir is same,no create dir')
 
 
 def get_imgs(source_dir, dataset_type):
     imgs = []
     if dataset_type == 'coco':
-        pass
+        imgs = getImageListFromMulti(source_dir,dataset_type='coco')
     elif dataset_type == 'yolo':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
-    elif dataset_type == 'labelimg':
+    elif dataset_type == 'labelme':
         imgs = getImageListFromMulti(source_dir, dataset_type='yolo')
     elif dataset_type == 'dota':
         imgs = getImageListFromMulti(source_dir, dataset_type='dota')
@@ -64,11 +67,11 @@ def get_Anns(source_dir, dataset_type='coco'):
     postfix = Dataset_setting[dataset_type]['anno_type']
     anns = []
     if dataset_type == 'coco':
-        pass
+        anns = getAnnListFromMulti(source_dir,dataset_type='coco')
     elif dataset_type == 'yolo':
         anns = getAnnListFromMulti(source_dir, dataset_type='yolo')
-    elif dataset_type == 'labelimg':
-        anns = getAnnListFromMulti(source_dir, dataset_type='labelimg')
+    elif dataset_type == 'labelme':
+        anns = getAnnListFromMulti(source_dir, dataset_type='labelme')
     elif dataset_type == 'dota':
         anns = getAnnListFromMulti(source_dir, dataset_type='dota')
     elif dataset_type == 'voc':
@@ -82,7 +85,7 @@ def check_anno_file_exist(source_dir, type, exist_with_img=True):
     if type == 'coco':
         if os.path.exists(os.path.join(source_dir, 'annotations', 'annotation.json')):
             return True
-    elif type == 'labelimg':
+    elif type == 'labelme':
         if exist_with_img:
             pass
         else:
@@ -154,11 +157,16 @@ def check_img_ann_together(source_path):
     return images_dir_exist and annos_dir_exist
 
 
-def get_label_id_map_with_txt(label_txt_path):
+def get_label_id_map_with_txt(label_txt_path,dataset_type=None):
     class_id2name = {}
     class_name2id = {}
-    for i, line in enumerate(open(label_txt_path).readlines()):
+    if dataset_type == 'coco':
+        class_name2id['background'] = 0
+        class_id2name[0]='background'
+    for i, line in enumerate(open(label_txt_path,'r').readlines()):
         class_id = i  # starts with -1
+        if dataset_type == 'coco':
+            class_id = i+1
         class_name = line.strip()
 
         class_name2id[class_name] = class_id
@@ -176,6 +184,8 @@ def clear_hidden_files(path):
         else:
             clear_hidden_files(abspath)
 
+def filter_annotations(annotations, image_ids):
+    return [ann for ann in annotations if ann["image_id"] in image_ids]
 
 if __name__ == '__main__':
     # test
@@ -186,8 +196,8 @@ if __name__ == '__main__':
     # ann_list = getAnnListFromMulti('./exp_dataset/yolo',dataset_type='yolo')
     # print(ann_list)
 
-    # imgs_list, imgs_len = get_imgs(source_dir, dataset_type='labelimg')
-    # anns_list, anns_len = get_Anns(source_dir, dataset_type='labelimg')
+    # imgs_list, imgs_len = get_imgs(source_dir, dataset_type='labelme')
+    # anns_list, anns_len = get_Anns(source_dir, dataset_type='labelme')
     # print(imgs_list)
     # print(anns_list)
     # test

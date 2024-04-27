@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 """
-@File    ：labelimg2dota.py
+@File    ：labelme2dota.py
 @Author  ：Csy
 @Date    ：2023-09-11 21:28
 @Bref    :
@@ -21,21 +21,27 @@ import utils
 from utils.Exception import *
 
 
-class Labelimg2DOTA():
+class Labelme2DOTA():
 
-    def __init__(self, source_dir, dst_dir, ann_image_together=True):
+    def __init__(self, source_dir, dst_dir,
+                 source_dataset_type='labelme', dst_dataset_type='dota',
+                 ann_image_together=False,
+                 source_labels_txt_path=None):
         self.source_dir = source_dir
         self.dst_dir = dst_dir
 
-        self.source_dataset_type = 'labelimg'
+        self.source_dataset_type = 'labelme'
         self.dst_dataset_type = 'dota'
         self.diffculty = 0
         self.source_images_dir_path = os.path.join(source_dir, Dataset_setting[self.source_dataset_type]['dirs']
         [0])
         self.source_labels_dir_path = self.source_images_dir_path
+        self.source_labels_txt_path = source_labels_txt_path
         if not ann_image_together:
             self.source_labels_dir_path = os.path.join(source_dir,
                                                        Dataset_setting[self.source_dataset_type]['dirs'][-1])
+        print('dst_dir struct:')
+        utils.check_and_create_dir(self.dst_dataset_type, dst_dir)
 
         self.dst_images_dir_path = os.path.join(dst_dir, Dataset_setting[self.dst_dataset_type]['dirs']
         [0])
@@ -44,7 +50,10 @@ class Labelimg2DOTA():
 
         # 根据用户是否提供
         # 1 遍历得到 2 用户提供
-        self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
+        # self.label_id_map = self.get_label_id_map(self.source_labels_dir_path)
+        if self.source_labels_txt_path is not None:
+            self.class_name_to_id, self.class_id_to_name = utils.get_label_id_map_with_txt(
+                self.source_labels_txt_path)
 
         # 打印 源文件夹下 目录情况
         print('src dir struct:')
@@ -56,8 +65,8 @@ class Labelimg2DOTA():
         # 是否创建文件夹
         # utils.make_dirs()
 
-        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelimg')
-        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelimg')
+        self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type='labelme')
+        self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type='labelme')
 
     def get_label_id_map(self, json_dir):
         label_set = set()
@@ -83,6 +92,8 @@ class Labelimg2DOTA():
                                             self.source_images_dir_path, self.dst_images_dir_path)
             dota_obj_list = self.get_dota_object_list(json_data, img_path)
             self.save_dota_label(json_name, self.dst_labels_dir_path, dota_obj_list)
+        shutil.copy(self.source_dir + "/" + 'classes.txt', self.dst_dir + "/" + 'classes.txt')
+        print('done!')
 
 
 
@@ -139,7 +150,7 @@ class Labelimg2DOTA():
     def save_dota_image(self, json_data, img_name, source_images_dir_path, dst_images_dir_path):
         sour_img_path = os.path.join(source_images_dir_path, img_name)
         dst_img_path = os.path.join(dst_images_dir_path, img_name)
-        if (json_data['imageData'] is not None) and not os.path.exists(dst_img_path):
+        if 'imageData'in json_data and json_data['imageData'] is not None and not os.path.exists(dst_img_path):
             img = utils.img_b64_to_arr(json_data['imageData'])
             PIL.Image.fromarray(img).save(dst_img_path)
         else:
@@ -148,5 +159,6 @@ class Labelimg2DOTA():
 
 
 if __name__ == '__main__':
-    convertor = Labelme2Dota(source_dir='../exp_dataset/labelme_test', dst_dir='../exp_dataset/TDataset')
+    convertor = Labelme2DOTA(source_dir='../exp_dataset/labelme_test', dst_dir='../exp_dataset/TDataset',
+                             ann_image_together=True)
     convertor.convert()

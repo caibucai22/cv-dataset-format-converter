@@ -15,3 +15,4 @@ class Divider(object):
     def __init__(self):
 
     def divide(self):
+        pass

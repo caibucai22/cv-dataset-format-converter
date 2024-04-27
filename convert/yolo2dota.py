@@ -59,9 +59,9 @@ class YOLO2DOTA():
         if self.source_labels_txt_path is not None:
             self.class_name_to_id, self.class_id_to_name = utils.get_label_id_map_with_txt(self.source_labels_txt_path)
 
-        # 打印 源文件夹下 目录情况
-        print('src dir struct:')
-        utils.print_dirs_info(source_dir)
+        # # 打印 源文件夹下 目录情况
+        # print('src dir struct:')
+        # utils.print_dirs_info(source_dir)
 
         self.imgs_list, _ = utils.get_imgs(self.source_dir, dataset_type=self.source_dataset_type)
         self.anns_list, _ = utils.get_Anns(self.source_dir, dataset_type=self.source_dataset_type)
@@ -80,6 +80,11 @@ class YOLO2DOTA():
                 lines = f.readlines()
                 for line in lines:
                     # print(line.strip())
+                    # 空行
+                    line = line.replace('\n','')
+                    if len(line.strip()) == 0:
+                        continue
+                    print(line)
                     (idx, x, y, w, h) = [float(itm) for itm in line.split(' ')]
                     points = utils.bbox_yolo2dota(x, y, w, h, img_w, img_h)
                     label = self.class_id_to_name[idx]
@@ -107,7 +112,7 @@ class YOLO2DOTA():
 
 
 if __name__ == '__main__':
-    convert = Yolo2Dota(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/dota',
-                        source_labels_txt_path='../exp_dataset/yolo/classes.txt',
+    convert = YOLO2DOTA(source_dir='../exp_dataset/TDataset', dst_dir='../exp_dataset/dota',
+                        source_labels_txt_path='../exp_dataset/TDataset/classes.txt',
                         source_dataset_type='yolo', dst_datatset_type='dota')
     convert.convert()

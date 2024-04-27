@@ -15,7 +15,7 @@ import utils
 
 class YOLO2VOC():
     def __init__(self, source_dir, dst_dir,
-                 source_dataset_type='yolo', dst_datatset_type='voc',
+                 source_dataset_type='yolo', dst_dataset_type='voc',
                  source_labels_txt_path=None,
                  ann_img_together=False,
                  test_size=0.2,
@@ -24,7 +24,7 @@ class YOLO2VOC():
         self.dst_dir = dst_dir
 
         self.source_dataset_type = source_dataset_type
-        self.dst_dataset_type = dst_datatset_type
+        self.dst_dataset_type = dst_dataset_type
 
         self.test_size = test_size
         self.val_size = val_size
@@ -103,6 +103,6 @@ class YOLO2VOC():
         print('done!')
 
 if __name__ == '__main__':
-    convertor = YOLO2VOC(source_dir='../exp_dataset/yolo',dst_dir='../exp_dataset/TDataset',
-                         source_labels_txt_path='../exp_dataset/yolo/classes.txt')
+    convertor = YOLO2VOC(source_dir='../exp_dataset/yolo', dst_dir='../exp_dataset/TDataset',
+                         source_labels_txt_path='../exp_dataset/yolo/labels/classes.txt')
     convertor.convert()

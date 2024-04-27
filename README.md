@@ -11,17 +11,18 @@ label-form-conversion-tool
 ## 转换流
 
 ```mermaid
-graph LR
+graph RL
     A[labelimg]
     B[labelme]
     C[COCO]
     D[YOLO]
     E[VOC]
     F[DOTA]
-    A --> C
-    A --> D
-    A --> F
-    B --> C
+    A -.->D
+    A -.->E
+    B -->|实例分割| C
+    B -->|实例分割| D
+    C -->|实例分割| D
     C --> D
     D --> C
     D --> E
