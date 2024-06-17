@@ -36,7 +36,7 @@ class CoCoSplit():
         self.dst_labels_dir_path = os.path.join(dst_dir, Dataset_setting[self.dataset_type]['dirs']
         [-1])
 
-    def convert(self):
+    def split(self):
         with open(self.source_labels_dir_path + '/' + 'annotations.json') as f:
             annotations_data = json.load(f)
 
@@ -86,3 +86,9 @@ class CoCoSplit():
             json.dump(test_json, f)
 
         print("done！")
+
+
+if __name__ == '__main__':
+    test_coco_split = CoCoSplit(source_dir="../exp_dataset/coco", dst_dir='./exp_dataset/coco_split',
+                                source_labels_txt_path='./exp_dataset/coco/classes.txt')
+    test_coco_split.split()
