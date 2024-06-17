@@ -138,5 +138,6 @@ dmypy.json
 cython_debug/
 
 .idea
+.history
 temp_test
 convert/unimplemented/
